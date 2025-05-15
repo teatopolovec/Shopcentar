@@ -1,0 +1,272 @@
+CREATE TABLE Osoba
+(
+  ime VARCHAR NOT NULL,
+  emailOsobe VARCHAR NOT NULL,
+  prezime VARCHAR NOT NULL,
+  lozinka VARCHAR NOT NULL,
+  idOsobe SERIAL NOT NULL,
+  uloga VARCHAR NOT NULL,
+  mobitel VARCHAR NOT NULL,
+  PRIMARY KEY (idOsobe)
+);
+
+CREATE TABLE Prostor
+(
+  idProstora SERIAL NOT NULL,
+  kvadratura INT NOT NULL,
+  etaža INT NOT NULL,
+  PRIMARY KEY (idProstora)
+);
+
+CREATE TABLE Kategorija
+(
+  idKategorije SERIAL NOT NULL,
+  nazivKategorije VARCHAR NOT NULL,
+  PRIMARY KEY (idKategorije),
+  UNIQUE (nazivKategorije)
+);
+
+CREATE TABLE Ponuda
+(
+  idPonude SERIAL NOT NULL,
+  tekstPonude VARCHAR NOT NULL,
+  trenutakObjavePonude TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  idProstora SERIAL NOT NULL,
+  idAdmin SERIAL NOT NULL,
+  PRIMARY KEY (idPonude),
+  FOREIGN KEY (idProstora) REFERENCES Prostor(idProstora),
+  FOREIGN KEY (idAdmin) REFERENCES Osoba(idOsobe)
+);
+
+CREATE TABLE Pretplata
+(
+  idPretplatnika SERIAL NOT NULL,
+  emailPretplatnika VARCHAR NOT NULL,
+  datumPretplate DATE NOT NULL,
+  PRIMARY KEY (idPretplatnika),
+  UNIQUE (emailPretplatnika)
+);
+
+CREATE TABLE ObavijestCentra
+(
+  idObavijesti SERIAL NOT NULL,
+  slikaObavijesti VARCHAR NOT NULL,
+  trenutakObjaveObavj TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  tekstObavijesti VARCHAR NOT NULL,
+  naslovObavijesti VARCHAR NOT NULL,
+  idAdmin SERIAL NOT NULL,
+  PRIMARY KEY (idObavijesti),
+  FOREIGN KEY (idAdmin) REFERENCES Osoba(idOsobe)
+);
+
+CREATE TABLE Trgovina
+(
+  idTrgovine SERIAL NOT NULL,
+  nazivTrgovine VARCHAR NOT NULL,
+  radnoVrijeme VARCHAR NOT NULL,
+  posljednjeAžuriranje TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  logoTrgovine VARCHAR NOT NULL,
+  telefonTrgovine VARCHAR,
+  emailTrgovine VARCHAR,
+  idUpravitelj SERIAL NOT NULL,
+  PRIMARY KEY (idTrgovine),
+  FOREIGN KEY (idUpravitelj) REFERENCES Osoba(idOsobe),
+  UNIQUE (nazivTrgovine)
+);
+
+CREATE TABLE Upit
+(
+  idUpita SERIAL NOT NULL,
+  imeUpit VARCHAR NOT NULL,
+  prezimeUpit VARCHAR NOT NULL,
+  tekstUpit VARCHAR NOT NULL,
+  trenutakUpita TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  emailUpit VARCHAR NOT NULL,
+  telefonUpit VARCHAR,
+  idPonude SERIAL NOT NULL,
+  PRIMARY KEY (idUpita),
+  FOREIGN KEY (idPonude) REFERENCES Ponuda(idPonude)
+);
+
+CREATE TABLE SlikaTrgovine
+(
+  idSlikeTrgovine SERIAL NOT NULL,
+  putanjaSlikeTrgovine VARCHAR NOT NULL,
+  idTrgovine SERIAL NOT NULL,
+  PRIMARY KEY (idSlikeTrgovine),
+  FOREIGN KEY (idTrgovine) REFERENCES Trgovina(idTrgovine),
+  UNIQUE (putanjaSlikeTrgovine)
+);
+
+CREATE TABLE iznajmljen
+(
+  iznajmljenoOd DATE NOT NULL,
+  iznajmljenoDo DATE NOT NULL,
+  idTrgovine SERIAL NOT NULL,
+  idProstora SERIAL NOT NULL,
+  PRIMARY KEY (iznajmljenoOd, idProstora),
+  FOREIGN KEY (idTrgovine) REFERENCES Trgovina(idTrgovine),
+  FOREIGN KEY (idProstora) REFERENCES Prostor(idProstora)
+);
+
+CREATE TABLE kategorija_trgovine
+(
+  idTrgovine SERIAL NOT NULL,
+  idKategorije SERIAL NOT NULL,
+  PRIMARY KEY (idTrgovine, idKategorije),
+  FOREIGN KEY (idTrgovine) REFERENCES Trgovina(idTrgovine),
+  FOREIGN KEY (idKategorije) REFERENCES Kategorija(idKategorije)
+);
+
+CREATE TABLE PromocijaTrgovine
+(
+  naslovPromocije VARCHAR NOT NULL,
+  tekstPromocije VARCHAR NOT NULL,
+  trenutakObjaveProm TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  idPromocije SERIAL NOT NULL,
+  slikaPromocije VARCHAR NOT NULL,
+  datumPočetkaProm DATE NOT NULL,
+  datumKrajaProm DATE NOT NULL,
+  idTrgovine SERIAL NOT NULL,
+  idObjavitelja SERIAL NOT NULL,
+  PRIMARY KEY (idPromocije),
+  FOREIGN KEY (idTrgovine) REFERENCES Trgovina(idTrgovine),
+  FOREIGN KEY (idObjavitelja) REFERENCES Osoba(idOsobe)
+);
+
+-- Osobe (2 admina + 10 upravitelja)
+INSERT INTO Osoba VALUES 
+('Ana', 'ana.admin@hedera.com', 'Anić', 'lozinka1', 1, 'admin', '0911111111'),
+('Ivan', 'ivan.admin@hedera.com', 'Ivić', 'lozinka2', 2, 'admin', '0922222222'),
+('Maja', 'maja.mango@hedera.com', 'Majić', 'lozinka3', 3, 'upravitelj', '0933333333'),
+('Luka', 'luka.zara@hedera.com', 'Horvat', 'lozinka4', 4, 'upravitelj', '0944444444'),
+('Ema', 'ema.adidas@hedera.com', 'Horvat', 'lozinka5', 5, 'upravitelj', '0955555555'),
+('Nikola', 'nikola.balon@hedera.com', 'Pavić', 'lozinka6', 6, 'upravitelj', '0966666666'),
+('Petra', 'petra.ccc@hedera.com', 'Petrić', 'lozinka7', 7, 'upravitelj', '0977777777'),
+('Tina', 'tina.cropp@hedera.com', 'Makić', 'lozinka8', 8, 'upravitelj', '0988888888'),
+('Josip', 'josip.ghetaldus@hedera.com', 'Kopić', 'lozinka9', 9, 'upravitelj', '0999999999'),
+('Ivana', 'ivana.dm@hedera.com', 'Ović', 'lozinka10', 10, 'upravitelj', '0912345678'),
+('Marko', 'marko.farmacia@hedera.com', 'Marić', 'lozinka11', 11, 'upravitelj', '0923456789'),
+('Nina', 'nina.pepco@hedera.com', 'Nit', 'lozinka12', 12, 'upravitelj', '0934567890');
+
+-- Prostor (10 iznajmljenih + 1 slobodan)
+INSERT INTO Prostor VALUES
+(1, 20000, 0),
+(2, 22000, 0),
+(3, 18000, 1),
+(4, 25000, 1),
+(5, 30000, 1),
+(6, 24000, 0),
+(7, 26000, 2),
+(8, 23000, 2),
+(9, 27000, 2),
+(10, 27000, 0),
+(11, 24000, 1); -- slobodan prostor
+
+-- Trgovine
+INSERT INTO Trgovina VALUES
+(1, 'Mango', '09:00-21:00', CURRENT_TIMESTAMP, 'mango_logo.png', '0101010101', 'mango@hedera.com', 3),
+(2, 'Zara', '09:00-21:00', CURRENT_TIMESTAMP, 'zara_logo.png', '0202020202', 'zara@hedera.com', 4),
+(3, 'adidas', '09:00-21:00', CURRENT_TIMESTAMP, 'adidas_logo.png', '0303030303', 'adidas@hedera.com', 5),
+(4, 'Balon centar', '09:00-20:00', CURRENT_TIMESTAMP, 'balon_logo.png', '0404040404', 'balon@hedera.com', 6),
+(5, 'CCC', '09:00-21:00', CURRENT_TIMESTAMP, 'ccc_logo.png', '0505050505', 'ccc@hedera.com', 7),
+(6, 'Cropp', '09:00-21:00', CURRENT_TIMESTAMP, 'cropp_logo.png', '0606060606', 'cropp@hedera.com', 8),
+(7, 'Ghetaldus', '09:00-21:00', CURRENT_TIMESTAMP, 'ghetaldus_logo.png', '0707070707', 'ghetaldus@hedera.com', 9),
+(8, 'dm', '09:00-21:00', CURRENT_TIMESTAMP, 'dm_logo.png', '0808080808', 'dm@hedera.com', 10),
+(9, 'Farmacia', '09:00-19:00', CURRENT_TIMESTAMP, 'farmacia_logo.png', '0909090909', 'farmacia@hedera.com', 11),
+(10, 'Pepco', '09:00-21:00', CURRENT_TIMESTAMP, 'pepco_logo.png', '1010101010', 'pepco@hedera.com', 12);
+
+-- Iznajmljivanje
+INSERT INTO iznajmljen VALUES
+('2024-01-01', '2027-12-31', 1, 1),
+('2024-01-01', '2027-12-31', 2, 2),
+('2024-01-01', '2027-12-31', 3, 3),
+('2024-01-01', '2027-12-31', 4, 4),
+('2024-01-01', '2027-12-31', 5, 5),
+('2024-01-01', '2027-12-31', 6, 6),
+('2024-01-01', '2027-12-31', 7, 7),
+('2024-01-01', '2027-12-31', 8, 8),
+('2024-01-01', '2027-12-31', 9, 9),
+('2024-01-01', '2027-12-31', 10, 10);
+
+-- Kategorije
+INSERT INTO Kategorija VALUES
+(1, 'odjeća'),
+(2, 'obuća'),
+(3, 'optika'),
+(4, 'kozmetika'),
+(5, 'ljekarna'),
+(6, 'stvari za dom'),
+(7, 'djeca'),
+(8, 'ostalo'),
+(9, 'nakit');
+
+-- Kategorije trgovina
+INSERT INTO kategorija_trgovine VALUES
+(1, 1), -- Mango - odjeća
+(2, 1), -- Zara - odjeća
+(3, 1), (3, 2), -- adidas - odjeća i obuća
+(4, 8), -- Balon centar - ostalo
+(5, 2), -- CCC - obuća
+(6, 1), -- Cropp - odjeća
+(7, 3), -- Ghetaldus - optika
+(8, 4), -- dm - kozmetika
+(9, 5), -- Farmacia - ljekarna
+(10, 6), (10, 1); -- Pepco - stvari za dom i odjeća
+
+-- Ponuda za slobodni prostor
+INSERT INTO Ponuda VALUES
+(1, 'Dostupan prostor površine 24000 m² na 1. katu idealan za nove sadržaje.', CURRENT_TIMESTAMP, 11, 1);
+
+-- Upiti
+INSERT INTO Upit VALUES
+(1, 'Karla', 'Novak', 'Zanima me može li se prostor koristiti za ugostiteljstvo i koliko bi koštao najam na dvije godine?', CURRENT_TIMESTAMP, 'karla.novak@email.com', '0910000000', 1),
+(2, 'Filip', 'Horvat', 'Postoji li mogućnost preinake prostora?', CURRENT_TIMESTAMP, 'filip.horvat@email.com', '0920000000', 1);
+
+-- Obavijesti
+INSERT INTO ObavijestCentra VALUES
+(1, 'radna_nedjelja.png', CURRENT_TIMESTAMP, 'Povodom državnog praznika Centar Hedera neće raditi u nedjelju 20.4.2025. Vodstvo i zaposlenici centra žele Vam sretne blagdane!', 'Neradna nedjelja 20.4.', 2),
+(2, 'uskrs_radionica.png', CURRENT_TIMESTAMP, 'Pridružite nam se na uskrsnoj radionici za djecu u srijedu 16.4.2025.!', 'Uskrsna radionica za djecu', 1);
+
+-- Promocije
+INSERT INTO PromocijaTrgovine VALUES
+('Tjedni popust u Zari', 'Cijeli asortiman snižen 10%! Potražite odlične komade po povoljnim cijenama.', CURRENT_TIMESTAMP, 1, 'zara_akcija.png', '2025-04-21', '2025-04-27', 2, 2),
+('Ghetaldus - popust na otopine', '15% popusta na otopine za leće samo 15.4.2025. Požurite u Vašu omiljenu Ghetaldus poslovnicu!', CURRENT_TIMESTAMP, 2, 'ghetaldus_otopine.png', '2025-04-15', '2025-04-15', 7, 1);
+
+-- Pretplatnici
+INSERT INTO Pretplata VALUES
+(1, 'ivana.peric@gmail.com', CURRENT_DATE),
+(2, 'marko.novak@outlook.com', CURRENT_DATE),
+(3, 'luka.kos@hotmail.com', CURRENT_DATE),
+(4, 'ana.maric@yahoo.com', CURRENT_DATE),
+(5, 'petar.horvat@live.com', CURRENT_DATE),
+(6, 'tina.juric@gmail.com', CURRENT_DATE),
+(7, 'filip.babic@net.hr', CURRENT_DATE),
+(8, 'marija.kovacic@outlook.com', CURRENT_DATE),
+(9, 'antonio.soldo@gmail.com', CURRENT_DATE),
+(10, 'ema.radic@yahoo.com', CURRENT_DATE),
+(11, 'dorotea.mlinaric@gmail.com', CURRENT_DATE),
+(12, 'nikola.veselic@outlook.com', CURRENT_DATE),
+(13, 'jelena.krstanovic@yahoo.com', CURRENT_DATE),
+(14, 'domagoj.zupan@hotmail.com', CURRENT_DATE),
+(15, 'marina.pavlicek@net.hr', CURRENT_DATE);
+
+SELECT setval(pg_get_serial_sequence('osoba', 'idosobe'), (SELECT MAX(idOsobe) FROM osoba));
+
+SELECT setval(pg_get_serial_sequence('prostor', 'idprostora'), (SELECT MAX(idProstora) FROM prostor));
+
+SELECT setval(pg_get_serial_sequence('kategorija', 'idkategorije'), (SELECT MAX(idKategorije) FROM kategorija));
+
+SELECT setval(pg_get_serial_sequence('ponuda', 'idponude'), (SELECT MAX(idPonude) FROM ponuda));
+
+SELECT setval(pg_get_serial_sequence('pretplata', 'idpretplatnika'), (SELECT MAX(idPretplatnika) FROM pretplata));
+
+SELECT setval(pg_get_serial_sequence('obavijestcentra', 'idobavijesti'), (SELECT MAX(idObavijesti) FROM obavijestcentra));
+
+SELECT setval(pg_get_serial_sequence('trgovina', 'idtrgovine'), (SELECT MAX(idTrgovine) FROM trgovina));
+
+SELECT setval(pg_get_serial_sequence('upit', 'idupita'), (SELECT MAX(idUpita) FROM upit));
+
+SELECT setval(pg_get_serial_sequence('slikatrgovine', 'idsliketrgovine'), (SELECT MAX(idSlikeTrgovine) FROM slikatrgovine));
+
+SELECT setval(pg_get_serial_sequence('promocijatrgovine', 'idpromocije'), (SELECT MAX(idPromocije) FROM promocijatrgovine));
