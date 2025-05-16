@@ -67,6 +67,7 @@ CREATE TABLE Trgovina
   posljednjeAžuriranje TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   logoTrgovine VARCHAR NOT NULL,
   telefonTrgovine VARCHAR,
+  aktivna BOOLEAN NOT NULL DEFAULT TRUE,
   emailTrgovine VARCHAR,
   idUpravitelj SERIAL NOT NULL,
   PRIMARY KEY (idTrgovine),
