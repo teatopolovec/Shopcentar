@@ -1,11 +1,12 @@
-package fer.infsus.Odbojka.service.impl;
+package fer.infsus.Shopcentar.service.impl;
 
-import fer.infsus.Odbojka.dao.TrgovinaRepository;
-import fer.infsus.Odbojka.domain.Osoba;
-import fer.infsus.Odbojka.domain.Trgovina;
-import fer.infsus.Odbojka.dto.TrgovinaDTO;
-import fer.infsus.Odbojka.service.OsobaService;
-import fer.infsus.Odbojka.service.TrgovinaService;
+
+import fer.infsus.Shopcentar.dao.TrgovinaRepository;
+import fer.infsus.Shopcentar.domain.Osoba;
+import fer.infsus.Shopcentar.domain.Trgovina;
+import fer.infsus.Shopcentar.dto.TrgovinaDTO;
+import fer.infsus.Shopcentar.service.OsobaService;
+import fer.infsus.Shopcentar.service.TrgovinaService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

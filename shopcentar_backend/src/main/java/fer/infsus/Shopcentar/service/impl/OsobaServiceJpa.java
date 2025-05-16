@@ -1,9 +1,10 @@
-package fer.infsus.Odbojka.service.impl;
+package fer.infsus.Shopcentar.service.impl;
 
 
-import fer.infsus.Odbojka.dao.OsobaRepository;
-import fer.infsus.Odbojka.domain.Osoba;
-import fer.infsus.Odbojka.service.OsobaService;
+
+import fer.infsus.Shopcentar.dao.OsobaRepository;
+import fer.infsus.Shopcentar.domain.Osoba;
+import fer.infsus.Shopcentar.service.OsobaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

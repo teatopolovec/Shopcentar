@@ -1,4 +1,4 @@
-package fer.infsus.Odbojka.domain;
+package fer.infsus.Shopcentar.domain;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.UpdateTimestamp;

@@ -1,5 +1,5 @@
-package fer.infsus.Odbojka.dao;
-import fer.infsus.Odbojka.domain.Osoba;
+package fer.infsus.Shopcentar.dao;
+import fer.infsus.Shopcentar.domain.Osoba;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

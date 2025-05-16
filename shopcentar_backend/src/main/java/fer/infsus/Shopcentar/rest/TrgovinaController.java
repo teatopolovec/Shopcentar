@@ -1,8 +1,8 @@
-package fer.infsus.Odbojka.rest;
+package fer.infsus.Shopcentar.rest;
 
-import fer.infsus.Odbojka.domain.Trgovina;
-import fer.infsus.Odbojka.dto.TrgovinaDTO;
-import fer.infsus.Odbojka.service.TrgovinaService;
+
+import fer.infsus.Shopcentar.dto.TrgovinaDTO;
+import fer.infsus.Shopcentar.service.TrgovinaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package fer.infsus.Odbojka.rest;
+package fer.infsus.Shopcentar.rest;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package fer.infsus.Odbojka.dto;
+package fer.infsus.Shopcentar.dto;
 
 import java.time.LocalDateTime;
 

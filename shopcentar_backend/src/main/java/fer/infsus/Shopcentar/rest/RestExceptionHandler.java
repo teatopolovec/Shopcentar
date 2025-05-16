@@ -1,4 +1,4 @@
-package fer.infsus.Odbojka.rest;
+package fer.infsus.Shopcentar.rest;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;

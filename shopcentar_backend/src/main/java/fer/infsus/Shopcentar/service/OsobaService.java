@@ -1,6 +1,6 @@
-package fer.infsus.Odbojka.service;
+package fer.infsus.Shopcentar.service;
 
-import fer.infsus.Odbojka.domain.Osoba;
+import fer.infsus.Shopcentar.domain.Osoba;
 
 public interface OsobaService {
     Osoba dohvatiUpraviteljaPoEmailu(String email);

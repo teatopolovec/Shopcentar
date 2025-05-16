@@ -1,7 +1,9 @@
-package fer.infsus.Odbojka.service;
+package fer.infsus.Shopcentar.service;
 
-import fer.infsus.Odbojka.domain.Trgovina;
-import fer.infsus.Odbojka.dto.TrgovinaDTO;
+
+
+import fer.infsus.Shopcentar.domain.Trgovina;
+import fer.infsus.Shopcentar.dto.TrgovinaDTO;
 
 import java.util.List;
 import java.util.Map;
