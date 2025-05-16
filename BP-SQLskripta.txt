@@ -91,7 +91,7 @@ CREATE TABLE Upit
 CREATE TABLE SlikaTrgovine
 (
   idSlikeTrgovine SERIAL NOT NULL,
-  putanjaSlikeTrgovine VARCHAR NOT NULL,
+  nazivSlikeTrgovine VARCHAR NOT NULL,
   idTrgovine SERIAL NOT NULL,
   PRIMARY KEY (idSlikeTrgovine),
   FOREIGN KEY (idTrgovine) REFERENCES Trgovina(idTrgovine),
