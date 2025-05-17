@@ -36,6 +36,11 @@ public class Osoba {
     )
     private Set<Trgovina> trgovine = new HashSet<>();
 
+    @OneToMany(
+            mappedBy = "objavitelj", fetch = FetchType.LAZY
+    )
+    private Set<PromocijaTrgovine> promocije = new HashSet<>();
+
     public Set<Trgovina> getTrgovine() {
         return trgovine;
     }
@@ -97,5 +102,13 @@ public class Osoba {
 
     public void setMobitel(String mobitel) {
         this.mobitel = mobitel;
+    }
+
+    public Set<PromocijaTrgovine> getPromocije() {
+        return promocije;
+    }
+
+    public void setPromocije(Set<PromocijaTrgovine> promocije) {
+        this.promocije = promocije;
     }
 }

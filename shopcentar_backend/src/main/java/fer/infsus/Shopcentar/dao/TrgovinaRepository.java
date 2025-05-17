@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface TrgovinaRepository extends JpaRepository<Trgovina, Integer> {
-    @Query("SELECT t.idTrgovine, t.nazivTrgovine FROM Trgovina t")
+    @Query("SELECT t.idTrgovine, t.nazivTrgovine FROM Trgovina t WHERE t.aktivna = true")
     List<Object[]> findIdAndNaziv();
+
+    boolean existsByNazivTrgovine(String nazivTrgovine);
 }
