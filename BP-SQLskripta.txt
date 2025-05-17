@@ -69,6 +69,7 @@ CREATE TABLE Trgovina
   telefonTrgovine VARCHAR,
   emailTrgovine VARCHAR,
   idUpravitelj SERIAL NOT NULL,
+  aktivna BOOLEAN NOT NULL DEFAULT TRUE,
   PRIMARY KEY (idTrgovine),
   FOREIGN KEY (idUpravitelj) REFERENCES Osoba(idOsobe),
   UNIQUE (nazivTrgovine)
@@ -91,11 +92,11 @@ CREATE TABLE Upit
 CREATE TABLE SlikaTrgovine
 (
   idSlikeTrgovine SERIAL NOT NULL,
-  putanjaSlikeTrgovine VARCHAR NOT NULL,
+  nazivSlikeTrgovine VARCHAR NOT NULL,
   idTrgovine SERIAL NOT NULL,
   PRIMARY KEY (idSlikeTrgovine),
   FOREIGN KEY (idTrgovine) REFERENCES Trgovina(idTrgovine),
-  UNIQUE (putanjaSlikeTrgovine)
+  UNIQUE (nazivSlikeTrgovine)
 );
 
 CREATE TABLE iznajmljen
@@ -165,16 +166,16 @@ INSERT INTO Prostor VALUES
 
 -- Trgovine
 INSERT INTO Trgovina VALUES
-(1, 'Mango', '09:00-21:00', CURRENT_TIMESTAMP, 'mango_logo.png', '0101010101', 'mango@hedera.com', 3),
-(2, 'Zara', '09:00-21:00', CURRENT_TIMESTAMP, 'zara_logo.png', '0202020202', 'zara@hedera.com', 4),
-(3, 'adidas', '09:00-21:00', CURRENT_TIMESTAMP, 'adidas_logo.png', '0303030303', 'adidas@hedera.com', 5),
-(4, 'Balon centar', '09:00-20:00', CURRENT_TIMESTAMP, 'balon_logo.png', '0404040404', 'balon@hedera.com', 6),
-(5, 'CCC', '09:00-21:00', CURRENT_TIMESTAMP, 'ccc_logo.png', '0505050505', 'ccc@hedera.com', 7),
-(6, 'Cropp', '09:00-21:00', CURRENT_TIMESTAMP, 'cropp_logo.png', '0606060606', 'cropp@hedera.com', 8),
-(7, 'Ghetaldus', '09:00-21:00', CURRENT_TIMESTAMP, 'ghetaldus_logo.png', '0707070707', 'ghetaldus@hedera.com', 9),
-(8, 'dm', '09:00-21:00', CURRENT_TIMESTAMP, 'dm_logo.png', '0808080808', 'dm@hedera.com', 10),
-(9, 'Farmacia', '09:00-19:00', CURRENT_TIMESTAMP, 'farmacia_logo.png', '0909090909', 'farmacia@hedera.com', 11),
-(10, 'Pepco', '09:00-21:00', CURRENT_TIMESTAMP, 'pepco_logo.png', '1010101010', 'pepco@hedera.com', 12);
+(1, 'Mango', '09:00-21:00', CURRENT_TIMESTAMP, 'mango_logo.png', '0101010101', 'mango@hedera.com', 3, true),
+(2, 'Zara', '09:00-21:00', CURRENT_TIMESTAMP, 'zara_logo.png', '0202020202', 'zara@hedera.com', 4, true),
+(3, 'adidas', '09:00-21:00', CURRENT_TIMESTAMP, 'adidas_logo.png', '0303030303', 'adidas@hedera.com', 5, true),
+(4, 'Balon centar', '09:00-20:00', CURRENT_TIMESTAMP, 'balon_logo.png', '0404040404', 'balon@hedera.com', 6, true),
+(5, 'CCC', '09:00-21:00', CURRENT_TIMESTAMP, 'ccc_logo.png', '0505050505', 'ccc@hedera.com', 7, true),
+(6, 'Cropp', '09:00-21:00', CURRENT_TIMESTAMP, 'cropp_logo.png', '0606060606', 'cropp@hedera.com', 8, true),
+(7, 'Ghetaldus', '09:00-21:00', CURRENT_TIMESTAMP, 'ghetaldus_logo.jpeg', '0707070707', 'ghetaldus@hedera.com', 9, true),
+(8, 'dm', '09:00-21:00', CURRENT_TIMESTAMP, 'dm_logo.png', '0808080808', 'dm@hedera.com', 10, true),
+(9, 'Farmacia', '09:00-19:00', CURRENT_TIMESTAMP, 'farmacia_logo.png', '0909090909', 'farmacia@hedera.com', 11, true),
+(10, 'Pepco', '09:00-21:00', CURRENT_TIMESTAMP, 'pepco_logo.jpeg', '1010101010', 'pepco@hedera.com', 12, true);
 
 -- Iznajmljivanje
 INSERT INTO iznajmljen VALUES
@@ -230,8 +231,8 @@ INSERT INTO ObavijestCentra VALUES
 
 -- Promocije
 INSERT INTO PromocijaTrgovine VALUES
-('Tjedni popust u Zari', 'Cijeli asortiman snižen 10%! Potražite odlične komade po povoljnim cijenama.', CURRENT_TIMESTAMP, 1, 'zara_akcija.png', '2025-04-21', '2025-04-27', 2, 2),
-('Ghetaldus - popust na otopine', '15% popusta na otopine za leće samo 15.4.2025. Požurite u Vašu omiljenu Ghetaldus poslovnicu!', CURRENT_TIMESTAMP, 2, 'ghetaldus_otopine.png', '2025-04-15', '2025-04-15', 7, 1);
+('Tjedni popust u Zari', 'Cijeli asortiman snižen 10%! Potražite odlične komade po povoljnim cijenama.', CURRENT_TIMESTAMP, 1, '2.png', '2025-04-21', '2025-04-27', 2, 2),
+('Ghetaldus - popust na otopine', '15% popusta na otopine za leće samo 15.4.2025. Požurite u Vašu omiljenu Ghetaldus poslovnicu!', CURRENT_TIMESTAMP, 2, '3.png', '2025-04-15', '2025-04-15', 7, 1);
 
 -- Pretplatnici
 INSERT INTO Pretplata VALUES
