@@ -172,10 +172,10 @@ INSERT INTO Trgovina VALUES
 (4, 'Balon centar', '09:00-20:00', CURRENT_TIMESTAMP, 'balon_logo.png', '0404040404', 'balon@hedera.com', 6),
 (5, 'CCC', '09:00-21:00', CURRENT_TIMESTAMP, 'ccc_logo.png', '0505050505', 'ccc@hedera.com', 7),
 (6, 'Cropp', '09:00-21:00', CURRENT_TIMESTAMP, 'cropp_logo.png', '0606060606', 'cropp@hedera.com', 8),
-(7, 'Ghetaldus', '09:00-21:00', CURRENT_TIMESTAMP, 'ghetaldus_logo.png', '0707070707', 'ghetaldus@hedera.com', 9),
+(7, 'Ghetaldus', '09:00-21:00', CURRENT_TIMESTAMP, 'ghetaldus_logo.jpeg', '0707070707', 'ghetaldus@hedera.com', 9),
 (8, 'dm', '09:00-21:00', CURRENT_TIMESTAMP, 'dm_logo.png', '0808080808', 'dm@hedera.com', 10),
 (9, 'Farmacia', '09:00-19:00', CURRENT_TIMESTAMP, 'farmacia_logo.png', '0909090909', 'farmacia@hedera.com', 11),
-(10, 'Pepco', '09:00-21:00', CURRENT_TIMESTAMP, 'pepco_logo.png', '1010101010', 'pepco@hedera.com', 12);
+(10, 'Pepco', '09:00-21:00', CURRENT_TIMESTAMP, 'pepco_logo.jpeg', '1010101010', 'pepco@hedera.com', 12);
 
 -- Iznajmljivanje
 INSERT INTO iznajmljen VALUES
