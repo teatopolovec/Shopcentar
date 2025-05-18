@@ -44,7 +44,7 @@ public class PromocijaServiceJpa implements PromocijaService {
     @Transactional
     public PromocijaDTO azurirajPromociju(Integer id, PromocijaDTO dto, MultipartFile slika) throws IOException {
         PromocijaTrgovine promocija = promocijaRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Promocija nije pronađena"));
+                .orElseThrow(() -> new IllegalArgumentException("Promocija nije pronađena"));
 
         if (!Objects.equals(promocija.getNaslovPromocije(), dto.getNaslovPromocije())) {
             if (dto.getNaslovPromocije() == null || dto.getNaslovPromocije().isEmpty()) {
@@ -106,19 +106,16 @@ public class PromocijaServiceJpa implements PromocijaService {
     public PromocijaDTO kreirajPromociju(PromocijaDTO dto, MultipartFile slika) {
         PromocijaTrgovine promocija = new PromocijaTrgovine();
 
-        if (!Objects.equals(promocija.getNaslovPromocije(), dto.getNaslovPromocije())) {
-            if (dto.getNaslovPromocije() == null || dto.getNaslovPromocije().isEmpty()) {
-                throw new IllegalArgumentException("Promocija mora imati naslov.");
-            }
-            promocija.setNaslovPromocije(dto.getNaslovPromocije());
+        if (dto.getNaslovPromocije() == null || dto.getNaslovPromocije().isEmpty()) {
+            throw new IllegalArgumentException("Promocija mora imati naslov.");
         }
+        promocija.setNaslovPromocije(dto.getNaslovPromocije());
 
-        if (!Objects.equals(promocija.getTekstPromocije(), dto.getTekstPromocije())) {
-            if (dto.getTekstPromocije() == null || dto.getTekstPromocije().isEmpty()) {
-                throw new IllegalArgumentException("Promocija mora imati tekst.");
-            }
-            promocija.setTekstPromocije(dto.getTekstPromocije());
+        if (dto.getTekstPromocije() == null || dto.getTekstPromocije().isEmpty()) {
+            throw new IllegalArgumentException("Promocija mora imati tekst.");
         }
+        promocija.setTekstPromocije(dto.getTekstPromocije());
+
 
         if (dto.getDatumPočetkaProm() != null && dto.getDatumKrajaProm() != null) {
             if (dto.getDatumPočetkaProm().isAfter(dto.getDatumKrajaProm())) {
@@ -136,7 +133,7 @@ public class PromocijaServiceJpa implements PromocijaService {
         promocija.setObjavitelj(o);
         o.getPromocije().add(promocija);
 
-        Trgovina t = trgovinaService.findById2(dto.getIdTrgovine()).orElseThrow(() -> new EntityNotFoundException("Promocija nije pronađena"));
+        Trgovina t = trgovinaService.findById2(dto.getIdTrgovine()).orElseThrow(() -> new IllegalArgumentException("Trgovina nije pronađena"));
         t.getPromocije().add(promocija);
         promocija.setTrgovina(t);
 
@@ -167,7 +164,7 @@ public class PromocijaServiceJpa implements PromocijaService {
     @Transactional
     public void izbrisiPromociju(Integer id) throws IOException {
         PromocijaTrgovine promocija = promocijaRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Promocija nije pronađena"));
+                .orElseThrow(() -> new IllegalArgumentException("Promocija nije pronađena"));
         promocija.getTrgovina().getPromocije().remove(promocija);
         promocija.getObjavitelj().getPromocije().remove(promocija);
         Path putanja = Paths.get("slike", "promocije", String.valueOf(promocija.getTrgovina().getIdTrgovine()));

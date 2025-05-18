@@ -47,7 +47,6 @@ function PromocijeTrgovine({ idTrgovine }) {
         idTrgovine: idTrgovine,
       };
     }
-    console.log(promo)
     setPromocijaZaUredjivanje(promo);
   };
 
@@ -59,9 +58,10 @@ function PromocijeTrgovine({ idTrgovine }) {
     setPromocije(prevPromocije => {
       const postoji = prevPromocije.some(p => p.idPromocije === azuriranaPromocija.idPromocije);
       if (postoji) {
-        return prevPromocije.map(p => p.idPromocije === azuriranaPromocija.idPromocije ? azuriranaPromocija : p);
+        const x = prevPromocije.map(p => p.idPromocije === azuriranaPromocija.idPromocije ? azuriranaPromocija : p);
+        return x.sort((a, b) => new Date(b.datumPočetkaProm) - new Date(a.datumPočetkaProm))
       } else {
-        return [...prevPromocije, azuriranaPromocija];
+        return [ azuriranaPromocija, ...prevPromocije].sort((a, b) => new Date(b.datumPočetkaProm) - new Date(a.datumPočetkaProm));
       }
     });
     zatvoriFormu();

@@ -15,6 +15,6 @@ public class OsobaServiceJpa implements OsobaService {
 
     public Osoba dohvatiUpraviteljaPoEmailu(String email) {
         return osobaRepo.findByEmailOsobe(email)
-                .orElseThrow(() -> new RuntimeException("Upravitelj nije pronađen"));
+                .orElseThrow(() -> new IllegalArgumentException("Upravitelj nije pronađen."));
     }
 }

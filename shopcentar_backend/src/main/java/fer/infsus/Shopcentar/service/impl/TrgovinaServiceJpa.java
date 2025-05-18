@@ -115,7 +115,7 @@ public class TrgovinaServiceJpa implements TrgovinaService {
     @Transactional
     public Trgovina azurirajTrgovinu(Integer id, TrgovinaDTO dto, MultipartFile logoFile) {
         Trgovina trgovina = trgovinaRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Trgovina s ID " + id + " nije pronađena."));
+                .orElseThrow(() -> new IllegalArgumentException("Trgovina s ID " + id + " nije pronađena."));
 
         boolean novo = false;
         if (!Objects.equals(trgovina.getNazivTrgovine(), dto.getNazivTrgovine())) {
@@ -151,8 +151,8 @@ public class TrgovinaServiceJpa implements TrgovinaService {
 
         Osoba o = osobaService.dohvatiUpraviteljaPoEmailu(dto.getEmailUpravitelj());
         if (!Objects.equals(o.getEmailOsobe(), trgovina.getUpravitelj().getEmailOsobe())) {
-            trgovina.setUpravitelj(o);
             trgovina.getUpravitelj().getTrgovine().remove(trgovina);
+            trgovina.setUpravitelj(o);
             o.getTrgovine().add(trgovina);
         }
 
@@ -203,7 +203,7 @@ public class TrgovinaServiceJpa implements TrgovinaService {
     @Transactional
     public void izbrisiTrgovinu(Integer id) {
         Trgovina trgovina = trgovinaRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Trgovina s ID " + id + " nije pronađena."));
+                .orElseThrow(() -> new IllegalArgumentException("Trgovina s ID " + id + " nije pronađena."));
         trgovina.setAktivna(false);
         trgovinaRepo.save(trgovina);
     }

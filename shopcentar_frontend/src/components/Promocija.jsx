@@ -36,7 +36,7 @@ function PromocijaForma({ promocija, onSubmit, onCancel, idTrgovine }) {
     }
 
     if (!slikaPromocije && !izmijenjenaPromocija.idPromocije) {
-      alert("Logo je obavezan kod dodavanja nove trgovine.");
+      alert("Slika je obavezna.");
       return;
     }
 

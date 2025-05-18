@@ -70,10 +70,8 @@ public class SlikaTrgovineServiceJpa implements SlikaTrgovineService {
     }
 
     @Override
+    @Transactional
     public void obrisiSliku(Integer id, String naziv) throws IOException {
-        if (naziv.contains("..") || naziv.contains("/") || naziv.contains("\\")) {
-            throw new IllegalArgumentException("Neispravno ime slike.");
-        }
         Optional<SlikaTrgovine> s = slikaRepo.findByNazivSlikeTrgovineAndIdTrgovine(naziv, id);
 
         if (s.isPresent()) {
@@ -85,7 +83,7 @@ public class SlikaTrgovineServiceJpa implements SlikaTrgovineService {
 
             slikaRepo.delete(slika);
         } else {
-            throw new EntityNotFoundException("Slika nije pronađena.");
+            throw new IllegalArgumentException("Slika nije pronađena.");
         }
 
         Path putanja = Paths.get("slike", String.valueOf(id), naziv);
