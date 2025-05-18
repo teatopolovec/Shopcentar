@@ -1,0 +1,97 @@
+.promocije-container {
+  padding: 0.5rem;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: auto;
+  font-family: Arial, sans-serif;
+}
+
+.promocije-container h2 {
+  color: #333;
+}
+
+.promocije-container ul {
+  list-style: none;
+  padding: 0;
+}
+
+.promocije-container li {
+  background-color: white;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.promocije-container strong {
+  font-size: 1.1rem;
+  color: #222;
+}
+
+.promocije-container small {
+  margin-top: 0.25rem;
+  color: #666;
+}
+
+.promocije-container button {
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
+  margin-left: 0.2rem;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #1976d2;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.promocije-container button:hover {
+  background-color: #145ca1;
+}
+
+.promocije-container button:last-child {
+  background-color: #d32f2f;
+}
+
+.promocije-container button:last-child:hover {
+  background-color: #9a1e1e;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow: auto;
+  padding: 2rem;
+}
+
+.modal {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+.dodaj-promociju-link {
+  color: #6e6dff;
+  cursor: pointer;
+  font-weight: bold;
+  display: inline-block;
+  margin: 1rem 0;
+}
+
+.dodaj-promociju-link:hover {
+  color: #6e6dff;
+}

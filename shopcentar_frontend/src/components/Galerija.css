@@ -1,0 +1,29 @@
+.slika-wrapper {
+  position: relative;
+  display: inline-block;
+  margin: 8px;
+}
+
+.slika-wrapper img {
+  max-width: 150px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.delete-button {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: rgb(255, 102, 102);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  width: 29px;
+  height: 24px;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
+  padding: 0px;
+  padding-bottom: 28px;
+}
