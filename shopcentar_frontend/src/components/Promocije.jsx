@@ -30,7 +30,7 @@ function PromocijeTrgovine({ idTrgovine }) {
     fetch(`/api/promocija/izbrisi/${idPromocije}`, { method: 'DELETE' })
       .then(async res => {
         if (!res.ok) throw new Error(await res.text());
-        setPromocije(promocije.filter(p => p.idPromocije !== idPromocije));
+        setPromocije(prevPromocije => prevPromocije.filter(p => p.idPromocije !== idPromocije));
       })
       .catch(err => alert(err.message));
   };
@@ -125,12 +125,12 @@ function PromocijeTrgovine({ idTrgovine }) {
               {new Date(promo.datumPočetkaProm).toLocaleDateString()} - {new Date(promo.datumKrajaProm).toLocaleDateString()}
             </small>
             <button onClick={() => otvoriFormuZaUredjivanje(promo)} style={{ marginLeft: "1.5rem" }}>Uredi</button>{' '}
-            <button onClick={() => handleDelete(promo.idPromocije)}>Izbriši</button>
+            <button data-testid={`delete-${promo.idPromocije}`} onClick={() => handleDelete(promo.idPromocije)}>Izbriši</button>
           </li>
         ))}
       </ul>
       {promocijaZaUredjivanje && (
-        <div className="overlay">
+        <div role="dialog" className="overlay">
           <div className="modal">
             <PromocijaForma
               promocija={promocijaZaUredjivanje}

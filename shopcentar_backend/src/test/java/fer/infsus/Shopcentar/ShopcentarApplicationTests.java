@@ -1,10 +1,10 @@
-package fer.zavrsni.Odbojka;
+package fer.infsus.Shopcentar;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class OdbojkaApplicationTests {
+class ShopcentarApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -76,6 +76,14 @@ public class PromocijaServiceJpa implements PromocijaService {
                     .toLowerCase();
 
             try {
+                if (slika.getSize() > 1 * 1024 * 1024) {
+                    throw new RuntimeException("Slika je prevelika, najviše 1MB.");
+                }
+                String contentType = slika.getContentType();
+                if (contentType == null || !contentType.startsWith("image/")) {
+                    throw new RuntimeException("Slika mora biti slika..");
+                }
+
                 Path dir = Paths.get("slike", "promocije", String.valueOf(promocija.getTrgovina().getIdTrgovine()));
                 if (!Files.exists(dir)) {
                     Files.createDirectories(dir);
@@ -142,13 +150,20 @@ public class PromocijaServiceJpa implements PromocijaService {
         dto.setIdPromocije(promocija.getIdPromocije());
 
         if (slika != null && !slika.isEmpty()) {
+            if (slika.getSize() > 1 * 1024 * 1024) {
+                throw new RuntimeException("Slika je prevelika, najviše 1MB.");
+            }
+            String contentType = slika.getContentType();
+            if (contentType == null || !contentType.startsWith("image/")) {
+                throw new RuntimeException("Slika mora biti slika..");
+            }
             String vrsta = slika.getOriginalFilename().substring(slika.getOriginalFilename().lastIndexOf('.') + 1).toLowerCase();
             try {
                 Path putanja = Paths.get("slike", "promocije", String.valueOf(dto.getIdTrgovine()));
                 if (!Files.exists(putanja)) {
                     Files.createDirectories(putanja);
                 }
-                Path punaPutanja = putanja.resolve(String.valueOf(promocija.getIdPromocije())+"."+vrsta);
+                Path punaPutanja = putanja.resolve(promocija.getIdPromocije() +"."+vrsta);
                 Files.copy(slika.getInputStream(), punaPutanja, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 throw new RuntimeException("Greška prilikom spremanja promocije: " + e.getMessage(), e);
@@ -173,6 +188,13 @@ public class PromocijaServiceJpa implements PromocijaService {
             throw new IllegalArgumentException("Slika ne postoji.");
         }
         Files.delete(punaPutanja);
+
+        Path folder = putanja;
+        try (var dirStream = Files.newDirectoryStream(folder)) {
+            if (!dirStream.iterator().hasNext()) {
+                Files.delete(folder);
+            }
+        }
 
         promocijaRepo.delete(promocija);
     }
