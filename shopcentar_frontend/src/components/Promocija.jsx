@@ -65,7 +65,7 @@ function PromocijaForma({ promocija, onSubmit, onCancel, idTrgovine }) {
     const MAX_SIZE = 1 * 1024 * 1024;
     if (slikaPromocije) {
       if (slikaPromocije.size > MAX_SIZE) {
-        alert("Slika je prevelika, maksimalno 1MB");
+        alert("Slika je prevelika, maksimalno 1MB.");
         return;
       }
       formData.append("slika", slikaPromocije);

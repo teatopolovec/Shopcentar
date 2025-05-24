@@ -147,7 +147,7 @@ function Trgovina() {
 
     for (const file of fotografije) {
       if (file.size > MAX_SIZE) {
-        alert(`Fotografija ${file.name} je prevelika, maksimalno 1MB`);
+        alert(`Fotografija ${file.name} je prevelika, maksimalno 1MB.`);
         return;
       }
       formData.append("fotografije", file);

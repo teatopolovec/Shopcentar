@@ -37,6 +37,7 @@ afterEach(() => {
 
 
 test('“novo” prikazuje prazan formular i traži naziv', async () => {
+  fetch.mockResponseOnce(JSON.stringify({}));
   renderWithRoute('/trgovina/novo');
 
   const nazivInput = await screen.findByLabelText(/Naziv:/i);
@@ -63,6 +64,8 @@ test('dohvaća postojeću trgovinu i popunjava polja', async () => {
       posljednjeAžuriranje: new Date().toISOString(),
     })
   );
+  fetch.mockResponseOnce(JSON.stringify({}));
+  fetch.mockResponseOnce(JSON.stringify([]));
 
   renderWithRoute('/trgovina/123');
   expect(await screen.findByDisplayValue('Bonbon')).toBeInTheDocument();
@@ -70,6 +73,7 @@ test('dohvaća postojeću trgovinu i popunjava polja', async () => {
 });
 
 test('upload loga prikazuje preview', async () => {
+  fetch.mockResponseOnce(JSON.stringify({}));
   renderWithRoute('/trgovina/novo');
 
   const file = new File(['dummy'], 'logo.png', { type: 'image/png' });
@@ -123,6 +127,8 @@ test('klik “Izbriši” šalje DELETE i vraća na listu', async () => {
       posljednjeAžuriranje: new Date().toISOString(),
     })
   );
+  fetch.mockResponseOnce(JSON.stringify({}));
+  fetch.mockResponseOnce(JSON.stringify([]));
 
   fetch.mockResponseOnce('Obrisano', { status: 200 });
   renderWithRoute('/trgovina/123');

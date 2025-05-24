@@ -73,8 +73,6 @@ beforeAll(() => {
 });
 
 
-
-
 test('uspješno šalje formu i prikazuje poruku', async () => {
   const onSubmit = jest.fn();
   fetch.mockResponseOnce(JSON.stringify({ idPromocije: 100 }));
@@ -146,7 +144,7 @@ test('prevelika slika (>1MB) prikazuje alert i prekida slanje', () => {
   fireEvent.submit(screen.getByRole('button', { name: 'Spremi' }));
 
   expect(window.alert).toHaveBeenCalledWith(
-    'Slika je prevelika, maksimalno 1MB'
+    'Slika je prevelika, maksimalno 1MB.'
   );
   expect(fetch).not.toHaveBeenCalled();
 });
