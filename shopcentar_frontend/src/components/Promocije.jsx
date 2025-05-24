@@ -76,9 +76,9 @@ function PromocijeTrgovine({ idTrgovine }) {
     const datumDoDate = datumDo ? new Date(datumDo) : null;
 
     const prolaziDatum =
-      (!datumOdDate || datumPocetka >= datumOdDate) && (!datumDoDate || datumPocetka <= datumDoDate)
+      ((!datumOdDate || datumPocetka >= datumOdDate) && (!datumDoDate || datumPocetka <= datumDoDate))
       ||
-      (!datumOdDate || datumKraja >= datumOdDate) && (!datumDoDate || datumKraja <= datumDoDate);
+      ((!datumOdDate || datumKraja >= datumOdDate) && (!datumDoDate || datumKraja <= datumDoDate));
     return prolaziTekst && prolaziDatum;
   });
 
