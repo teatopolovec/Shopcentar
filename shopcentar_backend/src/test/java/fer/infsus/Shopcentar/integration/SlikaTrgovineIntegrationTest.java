@@ -66,7 +66,7 @@ public class SlikaTrgovineIntegrationTest {
 
         testTrgovina = new Trgovina();
         testTrgovina.setSlike(new HashSet<>());
-        testTrgovina.setNazivTrgovine("xy");
+        testTrgovina.setNazivTrgovine("xy2");
         testTrgovina.setRadnoVrijeme("09:00-21:00");
         testTrgovina.setUpravitelj(upravitelj);
         testTrgovina.setLogoTrgovine("logo.png");
@@ -74,7 +74,7 @@ public class SlikaTrgovineIntegrationTest {
     }
 
     @Test
-    void testSpremiDohvatiObrisiSlikuPutemKontrolera() throws Exception {
+    void testSpremiDohvatiObrisiSliku() throws Exception {
         MockMultipartFile multipartFile = new MockMultipartFile(
                 "fotografije",
                 "testslika.jpg",
