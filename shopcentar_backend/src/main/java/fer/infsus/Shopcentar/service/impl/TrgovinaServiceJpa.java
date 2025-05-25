@@ -2,12 +2,14 @@ package fer.infsus.Shopcentar.service.impl;
 
 
 import fer.infsus.Shopcentar.dao.TrgovinaRepository;
+import fer.infsus.Shopcentar.domain.Kategorija;
 import fer.infsus.Shopcentar.domain.Osoba;
 import fer.infsus.Shopcentar.domain.Trgovina;
+import fer.infsus.Shopcentar.dto.KategorijaDTO;
 import fer.infsus.Shopcentar.dto.TrgovinaDTO;
+import fer.infsus.Shopcentar.service.KategorijaService;
 import fer.infsus.Shopcentar.service.OsobaService;
 import fer.infsus.Shopcentar.service.TrgovinaService;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,10 +23,13 @@ import java.util.*;
 public class TrgovinaServiceJpa implements TrgovinaService {
     @Autowired
     private TrgovinaRepository trgovinaRepo;
+
+    @Autowired
+    private KategorijaService kategorijaService;
     @Autowired
     private OsobaService osobaService;
     @Transactional
-    public Trgovina kreirajTrgovinu(TrgovinaDTO dto, MultipartFile logoFile) throws IOException {
+    public Trgovina kreirajTrgovinu(TrgovinaDTO dto, MultipartFile logoFile, List<KategorijaDTO> kategorije) throws IOException {
         Trgovina trgovina = new Trgovina();
 
         if (trgovinaRepo.existsByNazivTrgovine(dto.getNazivTrgovine())) {
@@ -66,10 +71,25 @@ public class TrgovinaServiceJpa implements TrgovinaService {
         }
         trgovina.setLogoTrgovine(ime);
 
+        Set<Kategorija> azuriraneKat = new HashSet<Kategorija>();
+        Set<KategorijaDTO> noveKat = new HashSet<KategorijaDTO>(kategorije);
+
+        for(KategorijaDTO k : noveKat){
+            Kategorija novaK = new Kategorija();
+            novaK.setIdKategorije(k.getIdKategorije());
+            novaK.setNazivKategorije(k.getNazivKategorije());
+
+            Kategorija dohvacenaKat = kategorijaService.findById(k.getIdKategorije())
+                    .orElseThrow(() -> new IllegalArgumentException("Kategorija s ID " + k.getIdKategorije() + " nije pronađena."));
+            dohvacenaKat.getTrgovine().add(trgovina);
+            novaK.setTrgovine(dohvacenaKat.getTrgovine());
+            azuriraneKat.add(novaK);
+        }
+        trgovina.setKategorije(azuriraneKat);
+
         Osoba o = osobaService.dohvatiUpraviteljaPoEmailu(dto.getEmailUpravitelj());
         trgovina.setUpravitelj(o);
         o.getTrgovine().add(trgovina);
-
         return trgovinaRepo.save(trgovina);
     }
 
@@ -84,6 +104,21 @@ public class TrgovinaServiceJpa implements TrgovinaService {
             trgovine.add(mapa);
         }
         return trgovine;
+    }
+
+    @Override
+    public List<Map<String, Object>> dohvatiKategorijeTrg(Integer id) {
+        Trgovina t = trgovinaRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Trgovina s ID " + id + " nije pronađena."));
+        Set<Kategorija> rezultati = t.getKategorije();
+        List<Map<String, Object>> kat = new ArrayList<>();
+        for (Kategorija red : rezultati) {
+            Map<String, Object> mapa = new HashMap<>();
+            mapa.put("idKategorije", red.getIdKategorije());
+            mapa.put("nazivKategorije", red.getNazivKategorije());
+            kat.add(mapa);
+        }
+        return kat;
     }
 
     @Override
@@ -102,7 +137,6 @@ public class TrgovinaServiceJpa implements TrgovinaService {
                     } else {
                         dto.setEmailUpravitelj(null);
                     }
-
                     return dto;
                 });
     }
@@ -111,9 +145,43 @@ public class TrgovinaServiceJpa implements TrgovinaService {
         return trgovinaRepo.findById(id);
     }
 
+    @Transactional
+    @Override
+    public void azurirajKategorije(Integer id, List<KategorijaDTO> dto) {
+        Trgovina t = trgovinaRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Trgovina s ID " + id + " nije pronađena."));
+
+        Set<Kategorija> azuriraneKat = new HashSet<>();
+        Set<KategorijaDTO> noveKat = new HashSet<>(dto);
+
+        for(Kategorija k : t.getKategorije()) {
+            KategorijaDTO novaK = new KategorijaDTO();
+            novaK.setIdKategorije(k.getIdKategorije());
+            novaK.setNazivKategorije(k.getNazivKategorije());
+
+            if (!noveKat.contains(novaK)) {
+                k.getTrgovine().remove(t);
+            }
+        }
+
+        for(KategorijaDTO k : noveKat){
+            Kategorija novaK = new Kategorija();
+            novaK.setIdKategorije(k.getIdKategorije());
+            novaK.setNazivKategorije(k.getNazivKategorije());
+
+            Kategorija dohvacenaKat = kategorijaService.findById(k.getIdKategorije())
+                    .orElseThrow(() -> new IllegalArgumentException("Kategorija s ID " + k.getIdKategorije() + " nije pronađena."));
+            dohvacenaKat.getTrgovine().add(t);
+            novaK.setTrgovine(dohvacenaKat.getTrgovine());
+            azuriraneKat.add(novaK);
+        }
+
+        t.setKategorije(azuriraneKat);
+        return;
+    }
     @Override
     @Transactional
-    public Trgovina azurirajTrgovinu(Integer id, TrgovinaDTO dto, MultipartFile logoFile) {
+    public Trgovina azurirajTrgovinu(Integer id, TrgovinaDTO dto, MultipartFile logoFile, List<KategorijaDTO> kategorije) {
         Trgovina trgovina = trgovinaRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Trgovina s ID " + id + " nije pronađena."));
 
@@ -174,6 +242,8 @@ public class TrgovinaServiceJpa implements TrgovinaService {
             }
         }
 
+        azurirajKategorije(id, kategorije);
+
         if (logoFile != null && !logoFile.isEmpty()) {
             String vrsta = logoFile.getOriginalFilename().substring(logoFile.getOriginalFilename().lastIndexOf('.') + 1).toLowerCase();
             String ime = trgovina.getNazivTrgovine().toLowerCase() + "_logo." + vrsta;
@@ -196,6 +266,7 @@ public class TrgovinaServiceJpa implements TrgovinaService {
             }
             trgovina.setLogoTrgovine(ime);
         }
+
         return trgovinaRepo.save(trgovina);
     }
 
@@ -207,6 +278,8 @@ public class TrgovinaServiceJpa implements TrgovinaService {
         trgovina.setAktivna(false);
         trgovinaRepo.save(trgovina);
     }
+
+
 
     public void validirajRadnoVrijeme(String radnoVrijeme) {
         if (radnoVrijeme == null || radnoVrijeme.isEmpty()) {

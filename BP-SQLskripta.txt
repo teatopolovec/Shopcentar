@@ -14,8 +14,17 @@ CREATE TABLE Prostor
 (
   idProstora SERIAL NOT NULL,
   kvadratura INT NOT NULL,
-  etaža INT NOT NULL,
+  idEtaza SERIAL NOT NULL,
   PRIMARY KEY (idProstora)
+);
+
+CREATE TABLE Etaza
+(
+  idEtaza SERIAL NOT NULL,
+  brojEtaze INT NOT NULL,
+  opis VARCHAR NOT NULL,
+  PRIMARY KEY (idEtaza),
+  UNIQUE(brojEtaze)
 );
 
 CREATE TABLE Kategorija
@@ -164,6 +173,11 @@ INSERT INTO Prostor VALUES
 (10, 27000, 0),
 (11, 24000, 1); -- slobodan prostor
 
+INSERT INTO Etaza VALUES
+(0, 0, 'Prizemlje'),
+(1, 1, '1. kat'),
+(2, 2, '2. kat');
+
 -- Trgovine
 INSERT INTO Trgovina VALUES
 (1, 'Mango', '09:00-21:00', CURRENT_TIMESTAMP, 'mango_logo.png', '0101010101', 'mango@hedera.com', 3, true),
@@ -271,3 +285,5 @@ SELECT setval(pg_get_serial_sequence('upit', 'idupita'), (SELECT MAX(idUpita) FR
 SELECT setval(pg_get_serial_sequence('slikatrgovine', 'idsliketrgovine'), (SELECT MAX(idSlikeTrgovine) FROM slikatrgovine));
 
 SELECT setval(pg_get_serial_sequence('promocijatrgovine', 'idpromocije'), (SELECT MAX(idPromocije) FROM promocijatrgovine));
+
+SELECT setval(pg_get_serial_sequence('etaza', 'idetaza'), (SELECT MAX(idEtaza) FROM etaza));

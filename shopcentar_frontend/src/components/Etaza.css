@@ -1,0 +1,76 @@
+form {
+  margin: 0 auto;
+  max-width: 700px;
+}
+
+.form-row {
+  display: flex;  
+  align-items: center; 
+  padding: 1px;  
+}
+
+.form-row label {
+  width: 160px;      
+  margin-right: 10px;  
+  text-align: left;     
+  font-weight: bold;
+}
+
+.form-row input{
+  width: 500px;
+  padding: 6px 8px;
+  font-size: 14px;
+  margin-left: 5px;
+}
+
+select[multiple] {
+  width: 520px;
+  height: 150px;
+  padding: 6px 8px;
+  font-size: 14px;
+  margin-left: 5px;
+  margin-bottom: 10px;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+select[multiple]:focus {
+  border-color: #007bff;
+}
+
+select[multiple] option {
+  padding: 4px 8px;
+}
+
+select[multiple] option:hover {
+  background-color: #f1f1f1;
+}
+
+.spremi {
+  padding: 0.5rem 1rem;
+  background-color: #8474ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 2px;
+}
+
+.spremi:hover {
+  background-color: #8539ff;
+}
+
+.uspjesna-poruka {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 12px 16px;
+  border: 1px solid #c3e6cb;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  width: 200px;
+  text-align: center;
+}
+

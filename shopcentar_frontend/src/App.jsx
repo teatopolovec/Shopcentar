@@ -1,8 +1,10 @@
 import Header from "./components/Header";
-import Trgovine from "./components/Trgovine"
-import Trgovina from "./components/Trgovina"
+import Trgovine from "./components/Trgovine";
+import Trgovina from "./components/Trgovina";
+import Etaze from "./components/Etaze";
+import Etaza from "./components/Etaza";
 import {createBrowserRouter, Outlet, RouterProvider} from "react-router-dom";
-import "./App.css"
+import "./App.css";
 
 function App() {
 
@@ -20,6 +22,16 @@ function App() {
         {
           path: "/trgovina/:id",
           element: <Trgovina/>,
+          children: []
+        },
+        {
+          path: "/etaze",
+          element: <Etaze/>,
+          children: []
+        },
+        {
+          path: "/etaza/:id",
+          element: <Etaza/>,
           children: []
         }
       ]

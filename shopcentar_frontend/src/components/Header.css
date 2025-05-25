@@ -3,21 +3,22 @@
     padding-bottom: 8px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start; /* aligns items to the left */
     background-color: rgba(0, 0, 0);
     position: absolute;
     top: 0;
     left: 0;
     min-width: 100%;
+    gap: 20px; /* spacing between items */
 }
 
-.teme{
-    margin-right: auto;
-    margin-left: 14px;
+.teme {
     font-size: large;
     cursor: pointer;
     color: #ffffff;
+    margin-left: 30px;
 }
+
 
 @media only screen and (max-width: 768px) {
     .teme{

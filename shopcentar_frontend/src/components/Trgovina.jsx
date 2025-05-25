@@ -1,8 +1,9 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import Galerija from "./Galerija"
-import Promocije from "./Promocije"
+import Galerija from "./Galerija";
+import Promocije from "./Promocije";
 import { useNavigate } from 'react-router-dom';
+import Select from "react-dropdown-select";
 import "./Trgovina.css";
 
 function Trgovina() {
@@ -15,22 +16,81 @@ function Trgovina() {
   const [fotografije, setFotografije] = useState([]);
   const [refreshKey, setRefreshKey] = useState(0);
   const [noviId, setNoviId] = useState(null);
+  const [katTrgovine, setKatTrgovine] = useState([]);
+  const [upravitelji, setUpravitelji] = useState([]);
   const navigate = useNavigate();
+  let loading = false;
+
+  
+    useEffect(() => {
+      loading = true;
+      fetch(id && id !== "novo" ? `/api/trgovina/kategorije/${id}` : `/api/trgovina/kategorije`)
+      .then(res => {
+        if (!res.ok) throw new Error("Neuspješan dohvat kategorija trgovine");
+        return res.json();
+      })
+      .then(data => {
+        const kategorijeTNiz = data.map((el) => ({
+          value: parseInt(el.idKategorije),
+          label: el.nazivKategorije,
+        }));
+        setKatTrgovine(kategorijeTNiz);
+      })
+      .catch(err => console.error("Greška kod dohvaćanja kategorija:", err));
+      loading = false;
+    }, []);
+  
 
   useEffect(() => {
-  if (id === "novo") {
-    setTrgovina(prev => {
-      if (prev) return prev;
-      return {
-        nazivTrgovine: "",
-        radnoVrijeme: "",
-        emailTrgovine: "",
-        telefonTrgovine: "",
-        emailUpravitelj: "",
-        logoTrgovine: "",
-        posljednjeAžuriranje: new Date().toISOString(),
-      };
-    });
+    loading = true;
+    fetch(`/api/kategorija/popis`)
+      .then(res => {
+        if (!res.ok) throw new Error("Neuspješan dohvat kategorija");
+        return res.json();
+      })
+      .then(data => {
+        const kategorijeNiz = Object.entries(data).map((x) => ({
+          value: parseInt(x[0]),
+          label: x[1],
+        }));
+        setKategorije(kategorijeNiz);
+      })
+      .catch(err => console.error("Greška kod dohvaćanja kategorija:", err));
+    loading = false;
+  }, []);
+
+  useEffect(() => {
+    loading = true;
+    fetch(`/api/osoba/upravitelji`)
+      .then(res => {
+        if (!res.ok) throw new Error("Neuspješan dohvat upravitelja");
+        return res.json();
+      })
+      .then(data => {
+        const upraviteljiNiz = data.map((x) => ({
+          value: parseInt(x.idOsobe),
+          label: x.emailOsobe,
+        }));
+        setUpravitelji(upraviteljiNiz);
+      })
+      .catch(err => console.error("Greška kod dohvaćanja kategorija:", err));
+      loading = false;
+  }, []);
+
+  useEffect(() => {
+    if (id === "novo") {
+      setTrgovina(prev => {
+        if (prev) return prev;
+        return {
+          nazivTrgovine: "",
+          radnoVrijeme: "",
+          emailTrgovine: "",
+          telefonTrgovine: "",
+          emailUpravitelj: "",
+          logoTrgovine: "",
+          posljednjeAžuriranje: new Date().toISOString(),
+        };
+      });
     } else {
       setNoviId(id);
       fetch(`/api/trgovina/${id}`)
@@ -38,32 +98,25 @@ function Trgovina() {
           if (!res.ok) throw new Error('Neuspješan dohvat podataka');
           return res.json();
         })
-        .then(data => setTrgovina(data))
+        .then(data => {
+          setTrgovina(data);})
         .catch(err => alert(err.message));
+        
     }
   }, [id]);
-
-  useEffect(() => {
-    fetch('/api/kategorija/popis')
-      .then(res => {
-        if (!res.ok) throw new Error("Neuspješan dohvat kategorija");
-        return res.json();
-      })
-      .then(data => {
-        const kategorijeNiz = Object.entries(data).map(([id, naziv]) => ({
-          id: parseInt(id),
-          naziv,
-        }));
-        setKategorije(kategorijeNiz);
-      })
-      .catch(err => console.error("Greška kod dohvaćanja kategorija:", err));
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setTrgovina(prev => ({
       ...prev,
       [name]: value
+    }));
+  };
+
+  const handleChangeUp = (e) => {
+    setTrgovina(prev => ({
+      ...prev,
+      emailUpravitelj: e[0].label
     }));
   };
 
@@ -130,7 +183,7 @@ function Trgovina() {
       alert("Vrijeme početka mora biti prije završetka.");
       return;
     }
-
+    
     const formData = new FormData();
     formData.append(
       "dto",
@@ -138,6 +191,10 @@ function Trgovina() {
     );
     if (logoFile) formData.append("logo", logoFile);
     fotografije.forEach((file) => formData.append("fotografije", file));
+    formData.append(
+      "kategorije",
+      new Blob([JSON.stringify(katTrgovine.map((el) => ({idKategorije: el.value, nazivKategorije: el.label})))], { type: "application/json" })
+    );
 
     fetch(id && id !== "novo" ? `/api/trgovina/${id}` : "/api/trgovina/", {
       method: "POST",
@@ -169,23 +226,7 @@ function Trgovina() {
   };
 
   const handleChangeKategorija = (e) => {
-    const { name, options, multiple } = e.target;
-
-    if (multiple) {
-      const selectedValues = Array.from(options)
-        .filter(option => option.selected)
-        .map(option => parseInt(option.value));
-
-      setTrgovina(prev => ({
-        ...prev,
-        [name]: selectedValues
-      }));
-    } else {
-      setTrgovina(prev => ({
-        ...prev,
-        [name]: e.target.value
-      }));
-    }
+    setKatTrgovine(e);
   };
 
     const handleDelete = (e) => {
@@ -208,7 +249,15 @@ function Trgovina() {
       }
     }
 
+  function getIdUp () {
+    const selectedUpravitelj = upravitelji?.find(up => up.value === trgovina.emailUpravitelj);
+    return selectedUpravitelj;
+  }
+
   if (!trgovina) return <p>Učitavanje podataka...</p>;
+  if (loading) return <p>Učitavanje podataka...</p>;
+
+
 
   return (<>
     <form onSubmit={handleSubmit}>
@@ -308,26 +357,25 @@ function Trgovina() {
       
       <div className="form-row">
       <label>Kategorije:</label>
-      <select
+      <Select
         name="kategorije"
-        multiple
-        value={trgovina.kategorije || []}
+        multi
+        searchable
+        handle
+        keepSelectedInList
+        dropdownPosition="bottom"
+        values={katTrgovine}
+        options={kategorije}
         onChange={handleChangeKategorija}
-      >
-        {kategorije.map(kat => (
-          <option key={kat.id} value={kat.id}>
-            {kat.naziv}
-          </option>
-        ))}
-      </select></div>
+      /></div>
 
       <div className="form-row">
       <label>Upravitelj:</label>
-        <input
-          type="email"
+        <Select
           name="emailUpravitelj"
-          value={trgovina.emailUpravitelj}
-          onChange={handleChange}
+          values={[{value: getIdUp, label: trgovina.emailUpravitelj}]}
+          options={upravitelji}
+          onChange={handleChangeUp}
           required
         />
       </div>

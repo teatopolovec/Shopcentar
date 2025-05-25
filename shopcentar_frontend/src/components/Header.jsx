@@ -8,6 +8,7 @@ function Header() {
     <>
       <header className="Header">
         <span className="teme" onClick={(e) => { e.preventDefault(); navigate("/trgovine")}}>Trgovine</span>
+        <span className="teme" onClick={(e) => { e.preventDefault(); navigate("/etaze")}}>Etaže</span>
       </header>
     </>
   )

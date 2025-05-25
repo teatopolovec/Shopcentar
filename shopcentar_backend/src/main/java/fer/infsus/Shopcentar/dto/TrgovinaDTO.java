@@ -1,6 +1,9 @@
 package fer.infsus.Shopcentar.dto;
 
+import fer.infsus.Shopcentar.domain.Kategorija;
+
 import java.time.LocalDateTime;
+import java.util.Set;
 
 public class TrgovinaDTO {
     private String nazivTrgovine;
