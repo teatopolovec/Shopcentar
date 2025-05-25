@@ -7,6 +7,7 @@ import fer.infsus.Shopcentar.domain.Osoba;
 import fer.infsus.Shopcentar.domain.SlikaTrgovine;
 import fer.infsus.Shopcentar.domain.Trgovina;
 import fer.infsus.Shopcentar.service.SlikaTrgovineService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -31,6 +32,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 @ActiveProfiles("test")
 public class SlikaTrgovineIntegrationTest {
 

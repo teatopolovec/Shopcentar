@@ -6,6 +6,7 @@ import fer.infsus.Shopcentar.dao.TrgovinaRepository;
 import fer.infsus.Shopcentar.domain.Osoba;
 import fer.infsus.Shopcentar.domain.Trgovina;
 import fer.infsus.Shopcentar.dto.PromocijaDTO;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@Transactional
 public class PromocijaIntegrationTest {
 
     @Autowired

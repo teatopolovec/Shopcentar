@@ -2,6 +2,7 @@ package fer.infsus.Shopcentar.integration;
 
         import fer.infsus.Shopcentar.domain.Etaza;
         import fer.infsus.Shopcentar.dao.EtazaRepository;
+        import jakarta.transaction.Transactional;
         import org.junit.jupiter.api.BeforeEach;
         import org.junit.jupiter.api.Test;
         import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ package fer.infsus.Shopcentar.integration;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@Transactional
 public class EtazaIntegrationTest {
 
     @Autowired

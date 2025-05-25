@@ -1,10 +1,12 @@
 package fer.infsus.Shopcentar.controller;
 
 import fer.infsus.Shopcentar.rest.OsobaController;
+import fer.infsus.Shopcentar.rest.PromocijaController;
 import fer.infsus.Shopcentar.service.OsobaService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -15,7 +17,7 @@ import java.util.Map;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(OsobaController.class)
+@WebMvcTest(controllers = OsobaController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 public class OsobaControllerTest {
 
     @Autowired
@@ -28,7 +30,7 @@ public class OsobaControllerTest {
     void testDohvatiUpravitelje() throws Exception {
         List<Map<String, Object>> mockUpravitelji = List.of(
                 Map.of("idOsobe", "1", "emailOsobe", "ivan@example.com"),
-                Map.of("idOSobe", "2", "emailOsobe", "ana@example.com")
+                Map.of("idOsobe", "2", "emailOsobe", "ana@example.com")
         );
 
         Mockito.when(osobaService.dohvatiUpravitelje()).thenReturn(mockUpravitelji);

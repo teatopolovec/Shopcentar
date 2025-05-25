@@ -8,6 +8,7 @@ import fer.infsus.Shopcentar.domain.Osoba;
 import fer.infsus.Shopcentar.domain.Trgovina;
 import fer.infsus.Shopcentar.dto.PromocijaDTO;
 import fer.infsus.Shopcentar.dto.TrgovinaDTO;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@Transactional
 public class TrgovinaIntegrationTest {
 
     @Autowired

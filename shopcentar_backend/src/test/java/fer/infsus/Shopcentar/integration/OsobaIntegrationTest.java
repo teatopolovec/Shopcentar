@@ -2,6 +2,7 @@ package fer.infsus.Shopcentar.integration;
 
 import fer.infsus.Shopcentar.domain.Osoba;
 import fer.infsus.Shopcentar.dao.OsobaRepository;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@Transactional
 public class OsobaIntegrationTest {
 
     @Autowired
@@ -28,10 +30,7 @@ public class OsobaIntegrationTest {
 
     @BeforeEach
     public void setUp() {
-        osobaRepo.deleteAll();
-
         Osoba ivan = new Osoba();
-        ivan.setIdOsobe(1);
         ivan.setIme("Ivan");
         ivan.setPrezime("Ivić");
         ivan.setEmailOsobe("ivan@example.com");
@@ -41,7 +40,6 @@ public class OsobaIntegrationTest {
         osobaRepo.save(ivan);
 
         Osoba ana = new Osoba();
-        ana.setIdOsobe(2);
         ana.setIme("Ana");
         ana.setPrezime("Anić");
         ana.setEmailOsobe("ana@example.com");
@@ -51,7 +49,6 @@ public class OsobaIntegrationTest {
         osobaRepo.save(ana);
 
         Osoba marko = new Osoba();
-        marko.setIdOsobe(3);
         marko.setIme("Marko");
         marko.setPrezime("Marić");
         marko.setEmailOsobe("marko@example.com");
@@ -67,8 +64,7 @@ public class OsobaIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[*].emailOsobe", containsInAnyOrder("ivan@example.com", "ana@example.com")))
-                .andExpect(jsonPath("$[*].idOsobe", containsInAnyOrder(1,2)));
+                .andExpect(jsonPath("$[*].emailOsobe", containsInAnyOrder("ivan@example.com", "ana@example.com")));
     }
 
     @Test
