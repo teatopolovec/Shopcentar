@@ -23,6 +23,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Optional;
 
@@ -55,6 +56,7 @@ public class TrgovinaIntegrationTest {
     private MockMultipartFile logoFile;
 
     private MockMultipartFile dtoPart;
+    private MockMultipartFile katPart;
 
     @Autowired
     private ObjectMapper mapper;
@@ -96,6 +98,13 @@ public class TrgovinaIntegrationTest {
                 dtoJson.getBytes(StandardCharsets.UTF_8)
         );
 
+        katPart = new MockMultipartFile(
+                "kategorije",
+                "",
+                MediaType.APPLICATION_JSON_VALUE,
+                objectMapper.writeValueAsString(new ArrayList<>()).getBytes(StandardCharsets.UTF_8)
+        );
+
     }
 
 
@@ -105,6 +114,7 @@ public class TrgovinaIntegrationTest {
         var mvcResult = mockMvc.perform(multipart("/trgovina/")
                         .file(dtoPart)
                         .file(logoFile)
+                        .file(katPart)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.message").value("Trgovina je uspješno kreirana."))
@@ -142,6 +152,7 @@ public class TrgovinaIntegrationTest {
         var createRes = mockMvc.perform(multipart("/trgovina/")
                         .file(dtoPart)
                         .file(logoFile)
+                        .file(katPart)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.message").value("Trgovina je uspješno kreirana."))
@@ -162,6 +173,7 @@ public class TrgovinaIntegrationTest {
                                     "",
                                     MediaType.APPLICATION_JSON_VALUE,
                                     objectMapper.writeValueAsString(dto).getBytes(StandardCharsets.UTF_8)))
+                            .file(katPart)
                             .contentType(MediaType.MULTIPART_FORM_DATA))
                     .andExpect(status().isCreated())
                     .andExpect(jsonPath("$.message").value("Trgovina je uspješno ažurirana."));

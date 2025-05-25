@@ -392,14 +392,14 @@ function Trgovina() {
       /></div>
 
       <div className="form-row">
-      <label>Upravitelj:</label>
+      <label htmlFor="upravitelj">Upravitelj:</label>
         <Select
           name="emailUpravitelj"
           values={[{value: getIdUp, label: trgovina.emailUpravitelj}]}
           options={upravitelji}
           onChange={handleChangeUp}
           required
-          id='upravitelj'
+          inputId="upravitelj"
         />
       </div>
       <br />
