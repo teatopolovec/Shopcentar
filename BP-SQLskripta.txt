@@ -24,7 +24,7 @@ CREATE TABLE Prostor
   idProstora SERIAL NOT NULL,
   kvadratura INT NOT NULL,
   idEtaza SERIAL NOT NULL,
-  PRIMARY KEY (idProstora)
+  PRIMARY KEY (idProstora),
   FOREIGN KEY (idEtaza) REFERENCES Etaza(idEtaza)
 );
 
@@ -160,6 +160,11 @@ INSERT INTO Osoba VALUES
 ('Marko', 'marko.farmacia@hedera.com', 'Marić', 'lozinka11', 11, 'upravitelj', '0923456789'),
 ('Nina', 'nina.pepco@hedera.com', 'Nit', 'lozinka12', 12, 'upravitelj', '0934567890');
 
+INSERT INTO Etaza VALUES
+(0, 0, 'Prizemlje'),
+(1, 1, '1. kat'),
+(2, 2, '2. kat');
+
 -- Prostor (10 iznajmljenih + 1 slobodan)
 INSERT INTO Prostor VALUES
 (1, 20000, 0),
@@ -173,11 +178,6 @@ INSERT INTO Prostor VALUES
 (9, 27000, 2),
 (10, 27000, 0),
 (11, 24000, 1); -- slobodan prostor
-
-INSERT INTO Etaza VALUES
-(0, 0, 'Prizemlje'),
-(1, 1, '1. kat'),
-(2, 2, '2. kat');
 
 -- Trgovine
 INSERT INTO Trgovina VALUES
