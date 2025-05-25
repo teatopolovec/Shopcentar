@@ -19,7 +19,7 @@ function Etaza() {
             };
         });
         } else {
-            fetch(`/api/prostor/etaza/${id}`)
+            fetch(`/api/etaza/${id}`)
                 .then(res => {
                 if (!res.ok) throw new Error('Neuspješan dohvat podataka');
                 return res.json();
@@ -49,7 +49,7 @@ function Etaza() {
         formData.append("etaza", new Blob([JSON.stringify(etaza)], { type: "application/json" })
         );
 
-        fetch(id && id !== "novo" ? `/api/prostor/etaza/${id}` : "/api/prostor/etaza/", {
+        fetch(id && id !== "novo" ? `/api/etaza/${id}` : "/api/etaza/", {
         method: "POST",
         body: formData,
         })
@@ -67,7 +67,7 @@ function Etaza() {
     const handleDelete = (e) => {
       e.preventDefault();
       if (window.confirm("Jeste li sigurni da želite izbrisati etažu?")) {
-        fetch(`/api/prostor/etaza/izbrisi/${id}`, {
+        fetch(`/api/etaza/izbrisi/${id}`, {
           method: 'DELETE',
         })
           .then(async response => {

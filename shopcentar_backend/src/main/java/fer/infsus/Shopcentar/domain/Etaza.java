@@ -2,6 +2,9 @@ package fer.infsus.Shopcentar.domain;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "Etaza")
 public class Etaza {
@@ -15,6 +18,19 @@ public class Etaza {
 
     @Column(name = "opis",nullable = false)
     private String opis;
+
+    @OneToMany(
+            mappedBy = "etaza", fetch = FetchType.LAZY
+    )
+    private Set<Prostor> prostori = new HashSet<>();
+
+    public Set<Prostor> getProstori() {
+        return prostori;
+    }
+
+    public void setProstori(Set<Prostor> prostori) {
+        this.prostori = prostori;
+    }
 
     public Integer getIdEtaze() {
         return idEtaze;

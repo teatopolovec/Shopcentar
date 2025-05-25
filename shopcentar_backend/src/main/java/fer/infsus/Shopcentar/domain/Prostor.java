@@ -13,8 +13,8 @@ public class Prostor {
     @Column(name = "kvadratura", nullable = false)
     private Integer kvadratura;
 
-    @OneToOne
-    @JoinColumn(name = "idEtaze", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "idEtaza", nullable = false)
     private Etaza etaza;
 
     public Integer getIdProstora() {

@@ -7,7 +7,7 @@ function Etaze() {
   const [etaze, setEtaze] = useState([]);
 
   useEffect(() => {
-    fetch('/api/prostor/etaze')
+    fetch('/api/etaza/etaze')
       .then(res => {
         if (!res.ok) {
           throw new Error('Neuspješan dohvat etaza');

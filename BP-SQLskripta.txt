@@ -10,14 +10,6 @@ CREATE TABLE Osoba
   PRIMARY KEY (idOsobe)
 );
 
-CREATE TABLE Prostor
-(
-  idProstora SERIAL NOT NULL,
-  kvadratura INT NOT NULL,
-  idEtaza SERIAL NOT NULL,
-  PRIMARY KEY (idProstora)
-);
-
 CREATE TABLE Etaza
 (
   idEtaza SERIAL NOT NULL,
@@ -25,6 +17,15 @@ CREATE TABLE Etaza
   opis VARCHAR NOT NULL,
   PRIMARY KEY (idEtaza),
   UNIQUE(brojEtaze)
+);
+
+CREATE TABLE Prostor
+(
+  idProstora SERIAL NOT NULL,
+  kvadratura INT NOT NULL,
+  idEtaza SERIAL NOT NULL,
+  PRIMARY KEY (idProstora)
+  FOREIGN KEY (idEtaza) REFERENCES Etaza(idEtaza)
 );
 
 CREATE TABLE Kategorija

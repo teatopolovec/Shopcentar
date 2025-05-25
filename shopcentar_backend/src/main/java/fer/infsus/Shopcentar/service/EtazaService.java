@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public interface ProstorService {
-    List<Map<String, Object>> dohvatiProstore();
+public interface EtazaService {
 
     List<Map<String, Object>> dohvatiEtaze();
 
