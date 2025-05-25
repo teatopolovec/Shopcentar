@@ -184,7 +184,7 @@ function Trgovina() {
       return;
     }
 
-    if (!trgovina.emailOsobe){
+    if (!trgovina.emailUpravitelj){
       alert("Upravitelj ne može biti prazan.");
       return;
     }
