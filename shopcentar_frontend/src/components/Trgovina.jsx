@@ -183,6 +183,11 @@ function Trgovina() {
       alert("Vrijeme početka mora biti prije završetka.");
       return;
     }
+
+    if (!trgovina.emailOsobe){
+      alert("Upravitelj ne može biti prazan.");
+      return;
+    }
     
     const formData = new FormData();
     formData.append(
