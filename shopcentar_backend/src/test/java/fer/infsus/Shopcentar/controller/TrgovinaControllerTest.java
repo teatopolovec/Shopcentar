@@ -16,6 +16,8 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -50,15 +52,22 @@ public class TrgovinaControllerTest {
         MockMultipartFile logoFile = new MockMultipartFile(
                 "logo", "logo.png",
                 MediaType.IMAGE_PNG_VALUE, "fake-image-content".getBytes());
+        MockMultipartFile kat = new MockMultipartFile(
+                "kategorije",
+                "",
+                MediaType.APPLICATION_JSON_VALUE,
+                objectMapper.writeValueAsString(new ArrayList<>()).getBytes(StandardCharsets.UTF_8)
+        );
 
         Trgovina trgovina = new Trgovina();
         trgovina.setIdTrgovine(1);
 
-        Mockito.when(trgovinaService.kreirajTrgovinu(any(), any())).thenReturn(trgovina);
+        Mockito.when(trgovinaService.kreirajTrgovinu(any(), any(), any())).thenReturn(trgovina);
 
         mockMvc.perform(multipart("/trgovina/")
                         .file(dtoPart)
                         .file(logoFile)
+                        .file(kat)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.message").value("Trgovina je uspješno kreirana."))
@@ -79,15 +88,22 @@ public class TrgovinaControllerTest {
         MockMultipartFile logoFile = new MockMultipartFile(
                 "logo", "logo2.png",
                 MediaType.IMAGE_PNG_VALUE, "fake-logo-content".getBytes());
+        MockMultipartFile kat = new MockMultipartFile(
+                "kategorije",
+                "",
+                MediaType.APPLICATION_JSON_VALUE,
+                objectMapper.writeValueAsString(new ArrayList<>()).getBytes(StandardCharsets.UTF_8)
+        );
 
         Trgovina trgovina = new Trgovina();
         trgovina.setIdTrgovine(id);
 
-        Mockito.when(trgovinaService.azurirajTrgovinu(eq(id), any(), any())).thenReturn(trgovina);
+        Mockito.when(trgovinaService.azurirajTrgovinu(eq(id), any(), any(), any())).thenReturn(trgovina);
 
         mockMvc.perform(multipart("/trgovina/{id}", id)
                         .file(dtoPart)
                         .file(logoFile)
+                        .file(kat)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.message").value("Trgovina je uspješno ažurirana."))

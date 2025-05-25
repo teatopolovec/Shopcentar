@@ -61,7 +61,7 @@ class TrgovinaServiceJpaTest {
         when(trgovinaRepo.existsByNazivTrgovine("TechShop")).thenReturn(false);
         when(trgovinaRepo.save(any())).thenAnswer(inv -> inv.getArgument(0));
 
-        Trgovina rezultat = service.kreirajTrgovinu(dto, logo);
+        Trgovina rezultat = service.kreirajTrgovinu(dto, logo, new ArrayList<>());
 
         assertEquals("techshop_logo.png", rezultat.getLogoTrgovine());
         assertTrue(Files.exists(path));
@@ -95,7 +95,7 @@ class TrgovinaServiceJpaTest {
         when(trgovinaRepo.existsByNazivTrgovine("Postoji")).thenReturn(true);
 
         assertThrows(IllegalArgumentException.class,
-                () -> service.kreirajTrgovinu(dto, logo));
+                () -> service.kreirajTrgovinu(dto, logo, new ArrayList<>()));
         verify(trgovinaRepo, never()).save(any());
     }
 
@@ -112,7 +112,7 @@ class TrgovinaServiceJpaTest {
         when(trgovinaRepo.existsByNazivTrgovine("X")).thenReturn(false);
 
         assertThrows(IllegalArgumentException.class,
-                () -> service.kreirajTrgovinu(dto, logo));
+                () -> service.kreirajTrgovinu(dto, logo, new ArrayList<>()));
     }
 
     @Test
@@ -128,7 +128,7 @@ class TrgovinaServiceJpaTest {
         when(trgovinaRepo.existsByNazivTrgovine("NoImg")).thenReturn(false);
 
         assertThrows(IllegalArgumentException.class,
-                () -> service.kreirajTrgovinu(dto, txtFile));
+                () -> service.kreirajTrgovinu(dto, txtFile, new ArrayList<>()));
     }
 
     @Test
@@ -156,7 +156,7 @@ class TrgovinaServiceJpaTest {
         dto.setNazivTrgovine("NoviNaziv");
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
-                () -> service.azurirajTrgovinu(id, dto, null));
+                () -> service.azurirajTrgovinu(id, dto, null, new ArrayList<>()));
         assertEquals("Trgovina s tim nazivom već postoji.", ex.getMessage());
     }
 
@@ -172,7 +172,7 @@ class TrgovinaServiceJpaTest {
         dto.setNazivTrgovine(null);
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
-                () -> service.azurirajTrgovinu(id, dto, null));
+                () -> service.azurirajTrgovinu(id, dto, null, new ArrayList<>()));
         assertEquals("Trgovina mora imati naziv.", ex.getMessage());
     }
 
@@ -215,7 +215,7 @@ class TrgovinaServiceJpaTest {
         upravitelj2.setTrgovine(new HashSet<>());
         when(osobaService.dohvatiUpraviteljaPoEmailu("novi@upravljatelj.com")).thenReturn(upravitelj2);
 
-        Trgovina rezultat = service.azurirajTrgovinu(id, dto, logoFile);
+        Trgovina rezultat = service.azurirajTrgovinu(id, dto, logoFile, new ArrayList<>());
 
         assertEquals("noviNaziv", rezultat.getNazivTrgovine());
         assertEquals("09:00-20:00", rezultat.getRadnoVrijeme());

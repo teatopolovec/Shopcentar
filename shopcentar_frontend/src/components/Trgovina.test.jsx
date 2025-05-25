@@ -1,5 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import Trgovina from './Trgovina';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 
 const mocks = {
@@ -37,6 +38,9 @@ afterEach(() => {
 
 
 test('“novo” prikazuje prazan formular i traži naziv', async () => {
+  fetch.mockResponseOnce(JSON.stringify([]));
+  fetch.mockResponseOnce(JSON.stringify([])); 
+  fetch.mockResponseOnce(JSON.stringify([]));
   fetch.mockResponseOnce(JSON.stringify({}));
   renderWithRoute('/trgovina/novo');
 
@@ -52,20 +56,22 @@ test('“novo” prikazuje prazan formular i traži naziv', async () => {
 
 
 test('dohvaća postojeću trgovinu i popunjava polja', async () => {
-  fetch.mockResponseOnce(
-    JSON.stringify({
-      nazivTrgovine: 'Bonbon',
-      radnoVrijeme: '09:00-20:00',
-      emailTrgovine: 'b@shop.hr',
-      telefonTrgovine: '0911234567',
-      emailUpravitelj: 'upravitelj@shop.hr',
-      logoTrgovine: 'bonbon_logo.png',
-      kategorije: [],
-      posljednjeAžuriranje: new Date().toISOString(),
-    })
-  );
-  fetch.mockResponseOnce(JSON.stringify({}));
-  fetch.mockResponseOnce(JSON.stringify([]));
+fetch.mockResponseOnce(JSON.stringify([]));
+fetch.mockResponseOnce(JSON.stringify([])); 
+fetch.mockResponseOnce(JSON.stringify([]));
+fetch.mockResponseOnce(                    
+  JSON.stringify({
+    nazivTrgovine: 'Bonbon',
+    radnoVrijeme: '09:00-20:00',
+    emailTrgovine: 'b@shop.hr',
+    telefonTrgovine: '0911234567',
+    emailUpravitelj: 'upravitelj@shop.hr',
+    logoTrgovine: 'bonbon_logo.png',
+    kategorije: [],
+    posljednjeAžuriranje: new Date().toISOString(),
+  })
+);
+fetch.mockResponseOnce(JSON.stringify([]));
 
   renderWithRoute('/trgovina/123');
   expect(await screen.findByDisplayValue('Bonbon')).toBeInTheDocument();
@@ -73,6 +79,9 @@ test('dohvaća postojeću trgovinu i popunjava polja', async () => {
 });
 
 test('upload loga prikazuje preview', async () => {
+  fetch.mockResponseOnce(JSON.stringify([]));
+  fetch.mockResponseOnce(JSON.stringify([])); 
+  fetch.mockResponseOnce(JSON.stringify([]));
   fetch.mockResponseOnce(JSON.stringify({}));
   renderWithRoute('/trgovina/novo');
 
@@ -88,8 +97,11 @@ test('upload loga prikazuje preview', async () => {
 
 
 test('uspješan submit vrati poruku i navigira na detalje', async () => {
-  fetch.mockResponseOnce(JSON.stringify({}));
-  fetch.mockResponseOnce(JSON.stringify({ id: 55 })); 
+  fetch.mockResponseOnce(JSON.stringify([]));
+  fetch.mockResponseOnce(JSON.stringify([])); 
+  fetch.mockResponseOnce(JSON.stringify([]));
+  fetch.mockResponseOnce(JSON.stringify({ id: 55 , emailUpravitelj: 'test@firma.hr'})); 
+  fetch.mockResponseOnce(JSON.stringify([]));
 
   renderWithRoute('/trgovina/novo');
   fireEvent.change(screen.getByLabelText(/Naziv:/i), { target: { value: 'Nova' } });
@@ -102,7 +114,6 @@ test('uspješan submit vrati poruku i navigira na detalje', async () => {
 
   fireEvent.change(startInput, { target: { value: '09:00' } });
   fireEvent.change(endInput, { target: { value: '17:00' } });
-  fireEvent.change(screen.getByLabelText(/Upravitelj:/i), { target: { value: 'u@x.hr' } });
 
   fireEvent.submit(screen.getByRole('button', { name: 'Spremi' }));
 
@@ -115,6 +126,9 @@ test('uspješan submit vrati poruku i navigira na detalje', async () => {
 
 
 test('klik “Izbriši” šalje DELETE i vraća na listu', async () => {
+  fetch.mockResponseOnce(JSON.stringify([]));
+  fetch.mockResponseOnce(JSON.stringify([])); 
+  fetch.mockResponseOnce(JSON.stringify([]));
   fetch.mockResponseOnce(
     JSON.stringify({
       nazivTrgovine: 'Bonbon',
@@ -127,7 +141,6 @@ test('klik “Izbriši” šalje DELETE i vraća na listu', async () => {
       posljednjeAžuriranje: new Date().toISOString(),
     })
   );
-  fetch.mockResponseOnce(JSON.stringify({}));
   fetch.mockResponseOnce(JSON.stringify([]));
 
   fetch.mockResponseOnce('Obrisano', { status: 200 });

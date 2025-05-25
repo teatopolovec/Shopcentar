@@ -48,7 +48,7 @@ public class Trgovina {
             name = "kategorija_trgovine",
             joinColumns = @JoinColumn(name = "idtrgovine"),
             inverseJoinColumns = @JoinColumn(name = "idkategorije"))
-    private Set<Kategorija> kategorije;
+    private Set<Kategorija> kategorije = new HashSet<>();
 
     @OneToMany(
             mappedBy = "trgovina", fetch = FetchType.LAZY
