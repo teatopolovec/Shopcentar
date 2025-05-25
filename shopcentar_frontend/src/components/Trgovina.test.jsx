@@ -95,12 +95,40 @@ test('upload loga prikazuje preview', async () => {
   expect(img.src).toBe('blob:mocked-url');
 });
 
+jest.mock('react-dropdown-select', () => (props) => {
+  const handle = (e) => {
+    const sel = props.options?.find((opt) => String(opt?.value) === e.target.value);
+    if (sel) props.onChange([sel]);
+  };
+
+  const selectedValue = String(props.values?.[0]?.value ?? '');
+
+  return (
+    <select
+      data-testid={props.inputId || 'mock-select'}
+      value={selectedValue}
+      onChange={handle}
+    >
+      {(props.options || []).map((opt) =>
+        opt ? (
+          <option key={opt.value} value={opt.value}>
+            {opt.label ?? opt.value}
+          </option>
+        ) : null
+      )}
+    </select>
+  );
+});
+
 
 test('uspješan submit vrati poruku i navigira na detalje', async () => {
   fetch.mockResponseOnce(JSON.stringify([]));
   fetch.mockResponseOnce(JSON.stringify([])); 
-  fetch.mockResponseOnce(JSON.stringify([]));
-  fetch.mockResponseOnce(JSON.stringify({ id: 55 , emailUpravitelj: 'test@firma.hr'})); 
+  fetch.mockResponseOnce(JSON.stringify([ {
+        "idOsobe": 5,
+        "emailOsobe": "ema.adidas@hedera.com"
+    }]));
+  fetch.mockResponseOnce(JSON.stringify({ id: 55 })); 
   fetch.mockResponseOnce(JSON.stringify([]));
 
   renderWithRoute('/trgovina/novo');
@@ -114,7 +142,10 @@ test('uspješan submit vrati poruku i navigira na detalje', async () => {
 
   fireEvent.change(startInput, { target: { value: '09:00' } });
   fireEvent.change(endInput, { target: { value: '17:00' } });
-
+  await screen.findByText('ema.adidas@hedera.com');
+    fireEvent.change(screen.getByTestId('upravitelj'), {
+      target: { value: '5' }  
+    });
   fireEvent.submit(screen.getByRole('button', { name: 'Spremi' }));
 
   await waitFor(() => {
