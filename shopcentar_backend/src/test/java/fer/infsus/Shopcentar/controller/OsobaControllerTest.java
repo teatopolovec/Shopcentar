@@ -27,17 +27,17 @@ public class OsobaControllerTest {
     @Test
     void testDohvatiUpravitelje() throws Exception {
         List<Map<String, Object>> mockUpravitelji = List.of(
-                Map.of("id", 1, "ime", "Ivan", "prezime", "Ivić"),
-                Map.of("id", 2, "ime", "Ana", "prezime", "Anić")
+                Map.of("idOsobe", "1", "emailOsobe", "ivan@example.com"),
+                Map.of("idOSobe", "2", "emailOsobe", "ana@example.com")
         );
 
         Mockito.when(osobaService.dohvatiUpravitelje()).thenReturn(mockUpravitelji);
 
         mockMvc.perform(get("/osoba/upravitelji"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].ime").value("Ivan"))
-                .andExpect(jsonPath("$[1].prezime").value("Anić"));
+                .andExpect(jsonPath("$[0].idOsobe").value("1"))
+                .andExpect(jsonPath("$[0].emailOsobe").value("ivan@example.com"))
+                .andExpect(jsonPath("$[1].idOsobe").value("2"));
     }
 }
 

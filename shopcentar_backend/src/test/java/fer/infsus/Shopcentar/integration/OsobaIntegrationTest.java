@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class OsobaControllerIntegrationTest {
+public class OsobaIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -31,6 +31,7 @@ public class OsobaControllerIntegrationTest {
         osobaRepo.deleteAll();
 
         Osoba ivan = new Osoba();
+        ivan.setIdOsobe(1);
         ivan.setIme("Ivan");
         ivan.setPrezime("Ivić");
         ivan.setEmailOsobe("ivan@example.com");
@@ -40,6 +41,7 @@ public class OsobaControllerIntegrationTest {
         osobaRepo.save(ivan);
 
         Osoba ana = new Osoba();
+        ana.setIdOsobe(2);
         ana.setIme("Ana");
         ana.setPrezime("Anić");
         ana.setEmailOsobe("ana@example.com");
@@ -49,6 +51,7 @@ public class OsobaControllerIntegrationTest {
         osobaRepo.save(ana);
 
         Osoba marko = new Osoba();
+        marko.setIdOsobe(3);
         marko.setIme("Marko");
         marko.setPrezime("Marić");
         marko.setEmailOsobe("marko@example.com");
@@ -65,7 +68,7 @@ public class OsobaControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[*].emailOsobe", containsInAnyOrder("ivan@example.com", "ana@example.com")))
-                .andExpect(jsonPath("$[*].uloga", everyItem(is("upravitelj"))));
+                .andExpect(jsonPath("$[*].idOsobe", containsInAnyOrder(1,2)));
     }
 
     @Test
@@ -74,6 +77,7 @@ public class OsobaControllerIntegrationTest {
 
         mockMvc.perform(get("/osoba/upravitelji"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(0)));
+                .andExpect(jsonPath("$[*].emailOsobe", hasSize(0)))
+                .andExpect(jsonPath("$[*].idOsobe", hasSize(0)));
     }
 }
