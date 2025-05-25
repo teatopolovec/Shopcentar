@@ -31,6 +31,10 @@ public class SlikaTrgovineController {
                     .body("Greška pri brisanju slike: " + e.getMessage());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Nedosljednost u podacima: " + e.getMessage());
         }
     }
+
 }

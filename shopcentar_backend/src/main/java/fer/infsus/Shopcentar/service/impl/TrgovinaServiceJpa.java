@@ -62,8 +62,14 @@ public class TrgovinaServiceJpa implements TrgovinaService {
             if (contentType == null || !contentType.startsWith("image/")) {
                 throw new IllegalArgumentException("Prenesena datoteka nije slika.");
             }
+            if (logoFile.getSize() > 1 * 1024 * 1024) {
+                throw new RuntimeException("Slika je prevelika, najviše 1MB.");
+            }
             try {
                 Path putanja = Paths.get("slike/logo").resolve(ime);
+                if (!Files.exists(Paths.get("slike/logo"))) {
+                    Files.createDirectories(Paths.get("slike/logo"));
+                }
                 Files.copy(logoFile.getInputStream(), putanja, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 throw new RuntimeException("Greška prilikom spremanja slike: " + e.getMessage(), e);
@@ -250,6 +256,9 @@ public class TrgovinaServiceJpa implements TrgovinaService {
             String contentType = logoFile.getContentType();
             if (contentType == null || !contentType.startsWith("image/")) {
                 throw new IllegalArgumentException("Prenesena datoteka nije slika.");
+            }
+            if (logoFile.getSize() > 1 * 1024 * 1024) {
+                throw new RuntimeException("Slika je prevelika, najviše 1MB.");
             }
             try {
                 Path direktorij = Paths.get("slike/logo");

@@ -62,8 +62,13 @@ function PromocijaForma({ promocija, onSubmit, onCancel, idTrgovine }) {
         type: 'application/json'
       })
     );
+    const MAX_SIZE = 1 * 1024 * 1024;
     if (slikaPromocije) {
-      formData.append('slika', slikaPromocije);
+      if (slikaPromocije.size > MAX_SIZE) {
+        alert("Slika je prevelika, maksimalno 1MB.");
+        return;
+      }
+      formData.append("slika", slikaPromocije);
     }
     try {
       var res;
@@ -127,7 +132,7 @@ function PromocijaForma({ promocija, onSubmit, onCancel, idTrgovine }) {
       <br />
 
       <div className="form-row">
-        <label>Slika:</label><br />
+        <label htmlFor="slikaPromocije">Slika:</label><br />
           {logoPreview ? (
             <img
               src={logoPreview}
@@ -143,7 +148,7 @@ function PromocijaForma({ promocija, onSubmit, onCancel, idTrgovine }) {
               />
             )
           )}
-        <input type="file" accept="image/*" required={!izmijenjenaPromocija.idPromocije} onChange={handleLogoChange} />
+        <input type="file" accept="image/*" id="slikaPromocije" required={!izmijenjenaPromocija.idPromocije} onChange={handleLogoChange} />
       </div>
 
       <label>

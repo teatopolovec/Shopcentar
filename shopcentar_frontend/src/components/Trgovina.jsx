@@ -189,12 +189,31 @@ function Trgovina() {
       "dto",
       new Blob([JSON.stringify(trgovina)], { type: "application/json" })
     );
-    if (logoFile) formData.append("logo", logoFile);
-    fotografije.forEach((file) => formData.append("fotografije", file));
+
+    //if (logoFile) formData.append("logo", logoFile);
+    //fotografije.forEach((file) => formData.append("fotografije", file));
     formData.append(
       "kategorije",
       new Blob([JSON.stringify(katTrgovine.map((el) => ({idKategorije: el.value, nazivKategorije: el.label})))], { type: "application/json" })
     );
+
+    const MAX_SIZE = 1 * 1024 * 1024;
+    if (logoFile) {
+      if (logoFile.size > MAX_SIZE) {
+        alert("Logo je prevelik, maksimalno 1MB");
+        return;
+      }
+      formData.append("logo", logoFile);
+    }
+
+    for (const file of fotografije) {
+      if (file.size > MAX_SIZE) {
+        alert(`Fotografija ${file.name} je prevelika, maksimalno 1MB.`);
+        return;
+      }
+      formData.append("fotografije", file);
+    }
+
 
     fetch(id && id !== "novo" ? `/api/trgovina/${id}` : "/api/trgovina/", {
       method: "POST",
@@ -265,18 +284,19 @@ function Trgovina() {
         {id === "novo" ? "Stvori trgovinu" : "Uredi trgovinu"}
       </h2>
       <div className="form-row">
-      <label>Naziv:</label>
+      <label htmlFor="naziv">Naziv:</label>
         <input
           type="text"
           name="nazivTrgovine"
           value={trgovina.nazivTrgovine}
           onChange={handleChange}
           required
+          id="naziv"
         />
       </div>
       <br />
       <div className="form-row">
-        <label>Logo:</label><br />
+        <label htmlFor="logo">Logo:</label><br />
         {logoPreview ? (
           <img
             src={logoPreview}
@@ -292,7 +312,7 @@ function Trgovina() {
             />
           )
         )}
-        <input type="file" accept="image/*" required={id === "novo"}  onChange={handleLogoChange} />
+        <input type="file" accept="image/*" id="logo" required={id === "novo"}  onChange={handleLogoChange} />
       </div>
       <br />
       <div className="form-row">
@@ -312,6 +332,7 @@ function Trgovina() {
           }}
           required
           style={{width:"auto"}}
+          data-testid="radno-vrijeme-start"
         />
         <span> - </span>
         <input
@@ -328,6 +349,7 @@ function Trgovina() {
           }}
           required
           style={{width:"auto"}}
+          data-testid="radno-vrijeme-end"
         />
       </div>
      </div>
@@ -377,6 +399,7 @@ function Trgovina() {
           options={upravitelji}
           onChange={handleChangeUp}
           required
+          id='upravitelj'
         />
       </div>
       <br />

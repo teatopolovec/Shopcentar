@@ -30,9 +30,6 @@ public class SlikaTrgovineServiceJpa implements SlikaTrgovineService {
         Path direktorij = Paths.get("slike", String.valueOf(t.getIdTrgovine()));
 
         try {
-            if (!Files.exists(direktorij)) {
-                Files.createDirectories(direktorij);
-            }
 
             for (MultipartFile fotografija : fotografije) {
                 String contentType = fotografija.getContentType();
@@ -42,6 +39,14 @@ public class SlikaTrgovineServiceJpa implements SlikaTrgovineService {
 
                 String originalName = fotografija.getOriginalFilename();
                 if (originalName == null || originalName.isBlank()) continue;
+
+                if (fotografija.getSize() > 1 * 1024 * 1024) {
+                    continue;
+                }
+
+                if (!Files.exists(direktorij)) {
+                    Files.createDirectories(direktorij);
+                }
 
                 String ekstenzija = originalName.substring(originalName.lastIndexOf('.') + 1).toLowerCase();
                 String ime = UUID.randomUUID() + "." + ekstenzija;
@@ -62,7 +67,7 @@ public class SlikaTrgovineServiceJpa implements SlikaTrgovineService {
 
     @Override
     public List<String> dohvatiSlike(Integer id) {
-        List<SlikaTrgovine> slike = slikaRepo.findByTrgovinaIdTrgovine(id);
+        List<SlikaTrgovine> slike = Optional.ofNullable(slikaRepo.findByTrgovinaIdTrgovine(id)).orElse(List.of());
         List<String> nazivi = slike.stream()
                 .map(SlikaTrgovine::getNazivSlikeTrgovine)
                 .toList();
@@ -88,10 +93,16 @@ public class SlikaTrgovineServiceJpa implements SlikaTrgovineService {
 
         Path putanja = Paths.get("slike", String.valueOf(id), naziv);
         if (!Files.exists(putanja)) {
-            throw new IllegalArgumentException("Slika ne postoji.");
+            throw new IllegalStateException("Slika ne postoji.");
         }
-
         Files.delete(putanja);
+
+        Path folder = Paths.get("slike", String.valueOf(id));
+        try (var dirStream = Files.newDirectoryStream(folder)) {
+            if (!dirStream.iterator().hasNext()) {
+                Files.delete(folder);
+            }
+        }
 
     }
 }
